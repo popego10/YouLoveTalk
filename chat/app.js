@@ -1,7 +1,7 @@
 /**
  * http://usejsdoc.org/
  */
-process.env.NODE_ENV = ( process.env.NODE_ENV && ( process.env.NODE_ENV ).trim().toLowerCase() == 'production' ) ? 'production' : 'development';
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
@@ -11,7 +11,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ColorHash = require('color-hash');//아이디를 색으로 구별
 //require('dotenv').config({path:'chat.env'});//root경로에 생성하여 전역에서 접근가능하게
-require('dotenv').config();
+
 
 const webSocket = require('./socket')
 const indexRouter = require('./routes');
