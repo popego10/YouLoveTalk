@@ -21,6 +21,7 @@ const app = express();
 connect();
 
 //채팅방 접속자가 0명일때 방을 제거하는 코드 추가
+//sessionMiddleware를 이용하여  session에 회원정보 저장
 const sessionMiddleware = session({
 	resave:false,
 	saveUninitialized:false,

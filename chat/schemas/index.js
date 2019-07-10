@@ -3,23 +3,25 @@
  */
 
 //몽고디비와 연결하는 schema!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//중요중요중요주용요요요요요죠주죵ㅇ
 const mongoose = require('mongoose');
 
-const {MONGO_ID, MONGO_PASSWORD, NODE_ENV} = process.env
+//하드코딩하면 안되는데 일단 해야지
 const MONGO_URL = 'mongodb://admin:1234@localhost:27017/admin'
+//const {MONGO_ID, MONGO_PASSWORD, NODE_ENV} = process.env
 //const MONGO_URL = 'mongodb://${MONGO_ID}:${MONGO_PASSWORD}@localhost:27017/admin';
 
 module.exports =() => {
 	const connect = () =>{
 		
-		if(NODE_ENV != 'production'){
+		/*if(NODE_ENV != 'production'){
 			mongoose.set('debug', true);
-		}//////개발환경이 아닐때. 몽구스가 생서ㅇ하는 쿼리내용 콘솔에서 확인
+		}//////개발환경이 아닐때. 몽구스가 생서ㅇ하는 쿼리내용 콘솔에서 확인*/
 		mongoose.connect(MONGO_URL, {useNewUrlParser: true}, {
 			dbName:'chat',
 		}, (error) =>{
 			if(error){
-				console.log('몽고디비 연결에러',error);
+				console.error('몽고디비 연결에러',error);
 			}else{
 				console.log('몽고디비 연결 성공')
 			}

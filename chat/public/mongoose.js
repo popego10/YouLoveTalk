@@ -8,6 +8,7 @@ document.querySelectorAll('#user-list tr').forEach(function (el) {
     getComment(id);
   });
 });
+
 // 사용자 로딩
 function getUser() {
   var xhr = new XMLHttpRequest();
@@ -43,6 +44,7 @@ function getUser() {
   xhr.open('GET', '/users');
   xhr.send();
 }
+
 // 댓글 로딩
 function getComment(id) {
   var xhr = new XMLHttpRequest();
@@ -112,6 +114,7 @@ function getComment(id) {
   xhr.open('GET', '/comments/' + id);
   xhr.send();
 }
+
 // 사용자 등록 시
 document.getElementById('user-form').addEventListener('submit', function (e) {
   e.preventDefault();
@@ -140,6 +143,7 @@ document.getElementById('user-form').addEventListener('submit', function (e) {
   e.target.age.value = '';
   e.target.married.checked = false;
 });
+
 // 댓글 등록 시
 document.getElementById('comment-form').addEventListener('submit', function (e) {
   e.preventDefault();
