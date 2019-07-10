@@ -2,9 +2,9 @@ extends layout
 
 block content
   h1= title
-  a#exit-btn(href='/') ¹æ ³ª°¡±â
+  a#exit-btn(href='/') ë°© ë‚˜ê°€ê¸°
   fieldset
-    legend Ã¤ÆÃ ³»¿ë
+    legend ì±„íŒ… ë‚´ìš©
     #chat-list
       for chat in chats
         if chat.user === user
@@ -25,10 +25,10 @@ block content
             else
               div= chat.chat
   form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
-    label(for='gif') GIF ¿Ã¸®±â
+    label(for='gif') GIF ì˜¬ë¦¬ê¸°
     input#gif(type='file' name='gif' accept='image/gif')
     input#chat(name='chat')
-    button(type='submit') Àü¼Û
+    button(type='submit') ì „ì†¡
   script(src='/socket.io/socket.io.js')
   script.
     var socket = io.connect('http://localhost:8005/chat', {

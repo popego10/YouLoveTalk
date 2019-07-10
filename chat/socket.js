@@ -7,6 +7,7 @@ const axios = require('axios');
 module.exports = (server, app, sessionMiddleware) =>{
 	//louter에서 io객체 사용할 수 있게 
 	const io = socketIO(server, {path:'/socket.io'});
+	
 	app.set('io',io);
 	//.of를 이용해서 socket.io에 네임스페이스 부여
 	const room = io.of('/room');
@@ -34,8 +35,7 @@ module.exports = (server, app, sessionMiddleware) =>{
 		socket.to(roomId).emit('join',{
 			user:'system',
 			chat:'${req.session.color}님이 입장하셨습니다.',
-	});
-		
+		});
 		socket.on('disconnect',()=>{
 			console.log('chat 접속 해제');
 			socket.leave(roomId);
@@ -54,7 +54,7 @@ module.exports = (server, app, sessionMiddleware) =>{
 					user:'system',
 					chat: '${req.session.color}님이 퇴장하셨습니다.'
 				});
-			}
+			}	
 		});
-	});
+	});	
 };

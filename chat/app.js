@@ -1,7 +1,7 @@
 /**
  * http://usejsdoc.org/
  */
-require('dotenv').config();
+//require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
@@ -11,6 +11,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const ColorHash = require('color-hash');//아이디를 색으로 구별
 //require('dotenv').config({path:'chat.env'});//root경로에 생성하여 전역에서 접근가능하게
+require('dotenv').config();
 
 
 const webSocket = require('./socket')
@@ -25,7 +26,7 @@ connect();
 const sessionMiddleware = session({
 	resave:false,
 	saveUninitialized:false,
-	secret:process.env.chat,
+	secret: process.env.COOKIE_SECRET,
 	cookie:{
 		httpOnly:true,
 		secure:false,
@@ -33,7 +34,7 @@ const sessionMiddleware = session({
 });
 
 //
-app.set('view', path.join(__dirname,'views'));
+app.set('views', path.join(__dirname,'views'));
 app.set('view engine','pug');
 app.set('port', process.env.PORT || 8005);
 
@@ -44,15 +45,15 @@ app.use(express.urlencoded({extended:false}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 
-app.use(session({
-	resave:false,
-	saveUninitialized:false,
-	secret:process.env.COOKIE_SECRET,
-	cookie:{
-		httpOnly:true,
-		secure:false,
-	},
-}));
+// app.use(session({
+// 	resave:false,
+// 	saveUninitialized:false,
+// 	secret:process.env.COOKIE_SECRET,
+// 	cookie:{
+// 		httpOnly:true,
+// 		secure:false,
+// 	},
+// }));
 app.use(flash());
 
 app.use((req, res, next)=>{
@@ -65,13 +66,13 @@ app.use((req, res, next)=>{
 
 app.use('/',indexRouter);
 
-app.use(function(req, res, next) {
+app.use((req, res, next) =>{
 	const err = new Error('Not Found');
 	err.status = 404;
 	next(err);
 });
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next)=> {
 	  // set locals, only providing error in development
 	  res.locals.message = err.message;
 	  res.locals.error = req.app.get('env') === 'development' ? err : {};
