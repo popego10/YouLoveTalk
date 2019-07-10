@@ -6,7 +6,7 @@
 const mongoose = require('mongoose');
 
 //하드코딩하면 안되는데 일단 해야지
-const MONGO_URL = 'mongodb://root:1234@localhost:27017/admin'
+//const MONGO_URL = 'mongodb://root:1234@localhost:27017/admin'
 //const {MONGO_ID, MONGO_Password, NODE_ENV} = process.env
 //const MONGO_URL = 'mongodb://${MONGO_ID}:${MONGO_Password}@localhost:27017/admin';
 
@@ -15,7 +15,7 @@ module.exports =() => {
 		// if(NODE_ENV != 'production'){
 		// 	mongoose.set('debug', true);
 		// }//////개발환경이 아닐때. 몽구스가 생서ㅇ하는 쿼리내용 콘솔에서 확인
-		mongoose.connect(MONGO_URL, {useNewUrlParser: true}, {
+		mongoose.connect('mongodb://localhost:27017/chat',  {
 			dbName:'chat',
 		}, (error) =>{
 			if(error){
@@ -28,10 +28,10 @@ module.exports =() => {
 	connect();
 	
 	mongoose.connection.on('error', (error) =>{
-		console.error('연결 에러', error);
+		console.error('몽구스 연결 에러', error);
 	});
 	mongoose.connection.on('disconnected', () =>{
-		console.error('연결이 끊겼습니다.');
+		console.error('몽구스 연결이 끊겼습니다. 재연결할게요');
 		connect();
 	});//////////////에러 발생시 에러 내용 기록하고 접속끊길시 재접속
 	require('./chat');
