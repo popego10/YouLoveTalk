@@ -1,16 +1,17 @@
 extends layout
 
 block content
-  h1 GIF 채팅방
+  h1 YouLoveTalk
   fieldset
-    legend 채팅방 목록
+    legend 채팅 목록
     table
       thead
         tr
-          th 방 제목
+          th 채팅방 제목
           th 종류
           th 허용 인원
-          th 방장
+          th 방장 회원
+          
       tbody
         for room in rooms
           tr(data-id=room._id)

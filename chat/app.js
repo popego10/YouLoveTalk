@@ -1,7 +1,12 @@
 /**
  * http://usejsdoc.org/
  */
-//require('dotenv').config();
+//fontawesome icon 사용하기 위한 npm 설정과 import
+// import { library, icon } from '@fortawesome/fontawesome-svg-core'
+// import { faCamera } from '@fortawesome/free-solid-svg-icons'
+
+// library.add(faCamera)
+//const camera = icon({ prefix: 'fas', iconName: 'camera' })
 
 const express = require('express');
 const path = require('path');
@@ -83,7 +88,7 @@ app.use((err, req, res, next)=> {
 	});
 
 const server = app.listen(app.get('port'), ()=>{
-	console.log(app.get('port'), '번 포트에서 대기 중11');
+	console.log(app.get('port'), '포트에서 대기 중');
 });
 
 //webSocket(server, app);

@@ -15,8 +15,9 @@ module.exports =() => {
 		// if(NODE_ENV != 'production'){
 		// 	mongoose.set('debug', true);
 		// }//////개발환경이 아닐때. 몽구스가 생서ㅇ하는 쿼리내용 콘솔에서 확인
-		mongoose.connect('mongodb://localhost:27017/chat',  {
+		mongoose.connect('mongodb://localhost:27017/chat', {
 			dbName:'chat',
+			useNewUrlParser: true,//====>여기다가 parser 선언하면 사용가능
 		}, (error) =>{
 			if(error){
 				console.log('몽고디비 연결에러',error);

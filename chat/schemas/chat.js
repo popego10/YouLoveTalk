@@ -9,7 +9,7 @@ const chatSchema = new Schema({
 	room : {
 		type : ObjectId,
 		required : true,
-		ref : 'room',
+		ref : 'Room',
 	},//채팅방 아이디
 	user : {
 		type : String,
@@ -22,4 +22,4 @@ const chatSchema = new Schema({
 		default : Date.now,
 	},// 생성시간
 });
-module.exports = mongoose.model('chat', chatSchema);
+module.exports = mongoose.model('Chat', chatSchema);
