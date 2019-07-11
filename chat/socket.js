@@ -11,7 +11,7 @@ module.exports = (server, app, sessionMiddleware) =>{
 	app.set('io',io);
 	//.of를 이용해서 socket.io에 네임스페이스 부여
 	const room = io.of('/room');
-	const chat = io.of('../chat');
+	const chat = io.of('/chat');
 	//웹소켓 연결시마다 호출
 	io.use((socket, next)=>{
 		sessionMiddleware(socket.request, socket.request.res, next);

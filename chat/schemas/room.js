@@ -13,7 +13,7 @@ const roomSchema = new Schema({
 		type : Number,
 		required : true,
 		default : 10,
-		min : 2, // ==> 최소인원 1 ~ 최대 10명
+		min : 1, // ==> 최소인원 1 ~ 최대 10명
 	},//최대 수용 인원
 	owner : {
 		type : String,

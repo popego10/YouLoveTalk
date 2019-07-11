@@ -49,7 +49,7 @@ router.post('/room', async(req, res, next) => {
 	}
 });
 
-//채팅방 랜더링()
+//채팅방 랜더링
 router.get('/room/:id', async(req, res, next)=>{
 	try{
 		const room = await Room.findOne({_id: req.params.id});
