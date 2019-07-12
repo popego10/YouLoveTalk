@@ -7,17 +7,16 @@ block content
     table
       thead
         tr
-          th 채팅방 제목
           th 종류
-          th 허용 인원
+          th 채팅방 제목
+          //th 허용 인원
           th 방장 회원
-          
       tbody
         for room in rooms
           tr(data-id=room._id)
-            td= room.title
             td= room.password ? '비밀방' : '공개방'
-            td= room.max
+            td= room.title
+            //td= room.max
             td(style='color:' + room.owner)= room.owner
             -var password = room.password ? 'true' : 'false';
             td: button(data-password=password data-id=room._id).join-btn 입장
@@ -31,14 +30,17 @@ block content
     socket.on('newRoom', function (data) {
       var tr = document.createElement('tr');
       var td = document.createElement('td');
-      td.textContent = data.title;
-      tr.appendChild(td);
-      td = document.createElement('td');
+      
       td.textContent = data.password ? '비밀방' : '공개방';
       tr.appendChild(td);
+      
       td = document.createElement('td');
-      td.textContent = data.max;
+      td.textContent = data.title;
       tr.appendChild(td);
+                  
+      //td = document.createElement('td');
+      //- td.textContent = data.max;
+      //- tr.appendChild(td);
       td = document.createElement('td');
       td.style.color = data.owner;
       td.textContent = data.owner;

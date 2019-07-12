@@ -12,14 +12,16 @@ const roomSchema = new Schema({
 	max : {
 		type : Number,
 		required : true,
-		default : 10,
-		min : 1, // ==> 최소인원 1 ~ 최대 10명
+		default : 5,
+		min : 1, // ==> 최소인원 1 ~ 최대 5명
 	},//최대 수용 인원
 	owner : {
 		type : String,
 		required : true,
 	},//방장
-	password : String,//비밀번호
+	password : {
+		type : String,
+	},//비밀번호(공개/비공개)
 	createdAt : {
 		type : Date,
 		default : Date.now,

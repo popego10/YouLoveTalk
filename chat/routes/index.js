@@ -1,4 +1,5 @@
 const express = require('express');
+const JSAlert = require('js-alert');
 
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
@@ -15,7 +16,6 @@ const router = express.Router();
 // 		next(err);
 // 	});
 // });
-
 
 router.get('/', async (req, res, next) =>{
 	try{
@@ -39,6 +39,11 @@ router.post('/room', async(req, res, next) => {
 			owner: req.session.color, //채팅방장
 			password: req.body.password, //채팅방 비밀번호
 		});
+		if(!room.password){
+			JSAlert.alert("공개방 생성");
+		}else{
+			JSAlert.alert("비공개방 생성");
+		}
 		const newRoom = await room.save();
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
@@ -52,17 +57,17 @@ router.post('/room', async(req, res, next) => {
 //채팅방 랜더링
 router.get('/room/:id', async(req, res, next)=>{
 	try{
-		const room = await Room.findOne({_id: req.params.id});
+	const room = await Room.findOne({_id: req.params.id});
     const io = req.app.get('io');
     if(!room){
       req.flash('roomError', '없는 방입니다.');
       return res.redirect('/');
     }
-		if(room.password && room.password !=req.query.password){
-			req.flash('roomError', 'PW가 틀렸습니다.');
-			return res.redirect('/');
-    }
-    const {rooms} = io.of('/chat').adapter;
+	if(room.password && room.password !=req.query.password){
+		req.flash('roomError', 'PW가 틀렸습니다.');
+		return res.redirect('/');
+	}
+	const {rooms} = io.of('/chat').adapter;
     if(rooms && rooms[req.params.id] && room.max <= rooms[req.params.id].length){
       req.flash('roomError', '인원 초과');
 			return res.redirect('/');
