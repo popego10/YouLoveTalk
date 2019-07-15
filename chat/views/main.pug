@@ -24,7 +24,7 @@ block content
   a(href='/room') 채팅방 생성
   script(src='/socket.io/socket.io.js')
   script.
-    var socket = io.connect('http://localhost:8005/room', {
+    var socket = io.connect('http://192.168.0.13:8005/room', {
       path: '/socket.io'
     });
     socket.on('newRoom', function (data) {

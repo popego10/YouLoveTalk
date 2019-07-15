@@ -37,6 +37,7 @@ module.exports = (server, app, sessionMiddleware) =>{
 		socket.to(roomId).emit('join', {
 			user:'system',
 			chat:`${req.session.color}님이 입장하셨습니다.`,
+			//number: socket.adapter.rooms[roomId].length,
 		});
 		socket.on('disconnect', ()=>{
 			console.log('chat 접속 해제');
@@ -44,7 +45,7 @@ module.exports = (server, app, sessionMiddleware) =>{
 			const currentRoom = socket.adapter.rooms[roomId];
 			const userCount = currentRoom ? currentRoom.length : 0;
 			if(userCount === 0){ //userCount가 0이면 방을 제거 
-				axios.delete(`http://localhost:8005/room/${roomId}`)
+				axios.delete(`http://192.168.0.13:8005/room/${roomId}`)
 				.then(()=>{
 					console.log('채팅방 삭제');
 				})
@@ -54,7 +55,8 @@ module.exports = (server, app, sessionMiddleware) =>{
 			}else{
 				socket.to(roomId).emit('exit', {
 					user:'system',
-					chat: `${req.session.color}님이 퇴장하셨습니다.`
+					chat: `${req.session.color}님이 퇴장하셨습니다.`,
+					//number: socket.adapter.rooms[roomId].length,
 				});
 			}	
 		});

@@ -2,6 +2,15 @@
  * http://usejsdoc.org/
  */
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
+
+//mongoose timezone해결
+// var today = new Date();
+// today.setHours(today.getHours());
+// console.log(today);
+var today = new Date();
+today=today.toLocaleString();
+//console.log(today);
 
 const {Schema} = mongoose;
 const {Types : {ObjectId}} = Schema;

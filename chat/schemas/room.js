@@ -3,6 +3,10 @@
  */
 const mongoose = require('mongoose');
 
+var today = new Date();
+today.setHours(today.getHours());
+console.log(today);
+
 const {Schema} = mongoose;
 const roomSchema = new Schema({
 	title : {
@@ -24,7 +28,7 @@ const roomSchema = new Schema({
 	},//비밀번호(공개/비공개)
 	createdAt : {
 		type : Date,
-		default : Date.now,
+		default : today,
 	},//생성시간
 });
 module.exports = mongoose.model('Room', roomSchema);
