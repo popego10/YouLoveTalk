@@ -2,26 +2,31 @@ extends layout
 
 block content
   h1 YouLoveTalk
-  fieldset
-    legend 채팅 목록
-    table
-      thead
-        tr
-          th 종류
-          th 채팅방 제목
-          //th 허용 인원
-          th 방장 회원
-      tbody
-        for room in rooms
-          tr(data-id=room._id)
-            td= room.password ? '비밀방' : '공개방'
-            td= room.title
-            //td= room.max
-            td(style='color:' + room.owner)= room.owner
-            -var password = room.password ? 'true' : 'false';
-            td: button(data-password=password data-id=room._id).join-btn 입장
-  .error-message= error
-  a(href='/room') 채팅방 생성
+  //div(style='position:relative;height:50px;')
+  a(href='/room' style='position: absolute; top: 20px; right: 20px;')
+    i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
+  div(style='margin:20px; border: 3px solid #cbcbcb; padding:30px;')
+    fieldset
+      table
+        thead
+          tr
+            th 종류
+            th 채팅방 제목
+            //th 허용 인원
+            th 방장 회원
+        tbody
+          for room in rooms
+            tr(data-id=room._id)
+              td= room.password ? '비밀방' : '공개방'
+              td= room.title
+              //td= room.max
+              td(style='color:' + room.owner)= room.owner
+              -var password = room.password ? 'true' : 'false';
+              //td: button(data-password=password data-id=room._id).join-btn 입장
+              td: button(data-password=password data-id=room._id).join-btn
+                i.fa.fa-comment-dots(aria-hidden='true' style='font-size:20px;color:#282c37;')
+    .error-message= error
+ 
   script(src='/socket.io/socket.io.js')
   script.
     var socket = io.connect('http://192.168.0.13:8005/room', {
@@ -46,8 +51,9 @@ block content
       td.textContent = data.owner;
       tr.appendChild(td);
       td = document.createElement('td');
-      var button = document.createElement('button');
-      button.textContent = '입장';
+      
+      var button = document.createElement('td');
+      //button.textContent = '입장';
       button.dataset.password = data.password ? 'true' : 'false';
       button.dataset.id = data._id;
       button.addEventListener('click', addBtnEvent);
@@ -74,3 +80,6 @@ block content
     document.querySelectorAll('.join-btn').forEach(function (btn) {
       btn.addEventListener('click', addBtnEvent);
     });
+    //- document.querySelectorAll('.i').forEach(function (btn) {
+    //-   btn.addEventListener('click', addBtnEvent);
+    //- });

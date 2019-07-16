@@ -26,7 +26,7 @@ label[for='gif'], #chat, #chat-form [type='submit'] {
 }
 label[for='gif'] { cursor: pointer; padding: 5px; }
 #gif { display: none; }
-table, table th, table td {
+#border {
   text-align: center;
   border: 1px solid silver;
   border-collapse: collapse;

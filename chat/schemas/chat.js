@@ -10,7 +10,7 @@ const moment = require('moment-timezone');
 // console.log(today);
 var today = new Date();
 today=today.toLocaleString();
-//console.log(today);
+console.log(today);
 
 const {Schema} = mongoose;
 const {Types : {ObjectId}} = Schema;

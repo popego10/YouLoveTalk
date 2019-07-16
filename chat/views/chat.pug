@@ -2,43 +2,50 @@ extends layout
 
 block content
   h1= title
-  a#exit-btn(href='/') 방 나가기
-  //- #number
-  //-  | 채팅 인원 : 
-  //-  #number-count= number
-  fieldset
-    legend 채팅 내용
-    #chat-list
-      for chat in chats
-        if chat.user === user
-          .mine(style='color:' + chat.user)
-            div= chat.user
-            if chat.gif
-              img(src='/gif/' + chat.gif)
-            else
+  div(style='position:relative;')
+    div(style='position:absolute;top:-35px;right:80px;') 참여인원
+      #number-count= number
+  //a#exit-btn(href='/') 방 나가기
+  a#exit-btn(href='/')
+    i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
+  //- #number(style='padding-left:30px;') 참여자 수 : + 
+  //- div(style='float:right;') 참여인원
+  //-   #number-count= number
+  div(style='margin:50px 30px 30px 30px; border: 3px solid #cbcbcb; padding:30px;')
+    fieldset
+      #chat-list(style='overflow: auto')
+        for chat in chats
+          if chat.user === user
+            .mine(style='color:' + chat.user)
+              div= chat.user
+              if chat.gif
+                img(src='/gif/' + chat.gif)
+              else
+                div= chat.chat
+          else if chat.user === 'system'
+            .system
               div= chat.chat
-        else if chat.user === 'system'
-          .system
-            div= chat.chat
-        else
-          .other(style='color:' + chat.user)
-            div= chat.user
-            if chat.gif
-              img(src='/gif/' + chat.gif)
-            else
-              div= chat.chat
-  form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
-    label(for='gif') 사진
-    input#gif(type='file' name='gif' accept='image/gif')
-    input#chat(name='chat' autofocus='')
-    button(type='submit') 보내기
+          else
+            .other(style='color:' + chat.user)
+              div= chat.user
+              if chat.gif
+                img(src='/gif/' + chat.gif)
+              else
+                div= chat.chat
+  div(style='margin-right:30px;')
+    form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
+      label(for='gif')
+        i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
+      input#gif(type='file' name='gif' accept='image/gif')
+      input#chat(name='chat' autofocus='')
+      button(type='submit') 전송
   script(src='/socket.io/socket.io.js')
   script.
     var socket = io.connect('http://192.168.0.13:8005/chat', {
       path: '/socket.io'
     });
     socket.on('join', function (data) {
-      //document.querySelector(#number-count).textContent = data.number;//==>입장시 변경
+      document.getElementById("number-count").innerText = data.number;//==>입장시 변경
       var div = document.createElement('div');
       div.classList.add('system');
       var chat = document.createElement('div');
@@ -47,7 +54,7 @@ block content
       document.querySelector('#chat-list').appendChild(div);
     });
     socket.on('exit', function (data) {
-      //document.querySelector(#number-count).textContent = data.number;//==>퇴장시 변경
+      document.getElementById("number-count").innerText = data.number;//==>퇴장시 변경
       var div = document.createElement('div');
       div.classList.add('system');
       var chat = document.createElement('div');
@@ -62,20 +69,37 @@ block content
       } else {
         div.classList.add('other');
       }
+      //profile 이미지 출력
+      //- var profile = document.createElement();
+      //- profile.img = img(src="C:\123.jpg");
+      //- div.appendchilde(image);
+      //이름
       var name = document.createElement('div');
       name.textContent = data.user;
       div.appendChild(name);
+      //메시지 전송 시간 출력
+      var time = document.createElement('div');
+      time.textContent = new Date().toLocaleTimeString();
+      div.appendChild(time);
+      //- time.textContent = data.createdAt;
+      //- div.appendChild(time);
+      //채팅내용
       if (data.chat) {
         var chat = document.createElement('div');
         chat.textContent = data.chat;
         div.appendChild(chat);
       } else {
         var gif = document.createElement('img');
+        //- gif.time = rooms.created
         gif.src = '/gif/' + data.gif;
         div.appendChild(gif);
       }
       div.style.color = data.user;
       document.querySelector('#chat-list').appendChild(div);
+      //채팅 내용 append이후 스크롤 최하단으로 이동(채팅 입력시 마다==>이미지는 안먹으니까 그냥 채팅 입력시에만 최하단 고정)
+      var scroll = document.getElementById("chat-list");
+      scroll.scrollTop = scroll.scrollHeight;
+
     });
     //채팅 전송 이벤트 리스너
     document.querySelector('#chat-form').addEventListener('submit', function (e) {
@@ -110,4 +134,5 @@ block content
       xhr.open('POST', '/room/#{room._id}/gif');
       xhr.send(formData);
     });
-    //- $(document).scrollTop($(document).height());
+   
+    

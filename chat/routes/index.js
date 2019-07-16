@@ -81,8 +81,9 @@ router.get('/room/:id', async(req, res, next)=>{
 			room,
 			title: room.title,
 			chats,
-			//number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
+			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
 			user: req.session.color,
+			//createdAt: chats.createdAt,
 		});
 	}catch(error){
 		console.error(error);
@@ -112,6 +113,7 @@ router.post('/room/:id/chat', async (req, res, next) => {
 			room: req.params.id,
 			user: req.session.color,
 			chat: req.body.chat,
+			createdAt: req.body.createdAt,
 		});
 		await chat.save();
 		req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
@@ -147,7 +149,8 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 		const chat = new Chat({
 			room: req.params.id,
 			user: req.session.color,
-			gif: req.file.filename
+			gif: req.file.filename,
+			createdAt: req.body.createdAt,
 		});
 		await chat.save();
 		console.log(req.file);

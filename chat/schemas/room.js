@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 var today = new Date();
 today.setHours(today.getHours());
-console.log(today);
+//console.log(today);
 
 const {Schema} = mongoose;
 const roomSchema = new Schema({
