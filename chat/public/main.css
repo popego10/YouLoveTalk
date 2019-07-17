@@ -8,17 +8,30 @@
   border-radius: 5px;
   padding: 2px 5px;
 }
-.mine div:first-child, .other div:first-child { font-size: 12px; }
+/* .mine div:first-child, .other div:first-child { font-size: 12px; }
 .mine div:last-child, .other div:last-child {
   display: inline-block;
   border: 1px solid silver;
   border-radius: 5px;
   padding: 2px 5px;
   max-width: 300px;
+} */
+
+/* .mine div:nth-child(0), .other div:nth-child(0) {font-size: 12px;} */
+.mine div:nth-child(1), .other div:nth-child(1) {font-size: 12px;}
+.mine div:nth-child(2), .other div:nth-child(2) {
+  display: inline-block;
+  border: 1px solid silver;
+  border-radius: 5px;
+  padding: 2px 5px;
+  max-width: 300px;
 }
+.mine div:nth-child(3), .other div:nth-child(3) {font-size: 12px;}
+  
+
 #exit-btn { position: absolute; top: 20px; right: 20px; }
 #chat-list { height: 500px; overflow: auto; padding: 5px; }
-#chat-form { text-align: right; }
+#chat-form { text-align: right;}
 label[for='gif'], #chat, #chat-form [type='submit'] {
   display: inline-block;
   height: 30px;

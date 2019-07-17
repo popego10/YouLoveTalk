@@ -8,9 +8,6 @@ block content
   //a#exit-btn(href='/') 방 나가기
   a#exit-btn(href='/')
     i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
-  //- #number(style='padding-left:30px;') 참여자 수 : + 
-  //- div(style='float:right;') 참여인원
-  //-   #number-count= number
   div(style='margin:50px 30px 30px 30px; border: 3px solid #cbcbcb; padding:30px;')
     fieldset
       #chat-list(style='overflow: auto')
@@ -34,9 +31,16 @@ block content
                 div= chat.chat
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
-      label(for='gif')
-        i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
-      input#gif(type='file' name='gif' accept='image/gif')
+      div
+        label(for="vote")
+          i.fas.fa-poll(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;')
+          
+        label(for='file')
+          i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
+          //- input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
+        label(for='gif')
+          i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
+          input#gif(type='file' name='gif' accept='image/gif')
       input#chat(name='chat' autofocus='')
       button(type='submit') 전송
   script(src='/socket.io/socket.io.js')
@@ -73,29 +77,37 @@ block content
       //- var profile = document.createElement();
       //- profile.img = img(src="C:\123.jpg");
       //- div.appendchilde(image);
+      
       //이름
       var name = document.createElement('div');
       name.textContent = data.user;
       div.appendChild(name);
-      //메시지 전송 시간 출력
-      var time = document.createElement('div');
-      time.textContent = new Date().toLocaleTimeString();
-      div.appendChild(time);
-      //- time.textContent = data.createdAt;
-      //- div.appendChild(time);
-      //채팅내용
+      
+      //채팅내용+시간
       if (data.chat) {
-        var chat = document.createElement('div');
-        chat.textContent = data.chat;
-        div.appendChild(chat);
+        div
+          var chat = document.createElement('div');
+          //var time = document.createElement('div');
+          //time.textContent = new Date().toLocaleTimeString();
+          chat.textContent = data.chat;
+          //time.textContent = new Date().toLocaleTimeString();
+          //div.appendChild(time);
+          div.appendChild(chat);
       } else {
         var gif = document.createElement('img');
         //- gif.time = rooms.created
         gif.src = '/gif/' + data.gif;
         div.appendChild(gif);
       }
+      //메시지 전송 시간 출력
+      var time = document.createElement('div');
+      time.textContent = new Date().toLocaleTimeString();
+      div.appendChild(time);
+
+      //user에 색 주기
       div.style.color = data.user;
       document.querySelector('#chat-list').appendChild(div);
+      
       //채팅 내용 append이후 스크롤 최하단으로 이동(채팅 입력시 마다==>이미지는 안먹으니까 그냥 채팅 입력시에만 최하단 고정)
       var scroll = document.getElementById("chat-list");
       scroll.scrollTop = scroll.scrollHeight;
@@ -134,5 +146,38 @@ block content
       xhr.open('POST', '/room/#{room._id}/gif');
       xhr.send(formData);
     });
-   
+    //채팅 백업 리스너 추가
+    document.querySelector('#chat').addEventListener('backup', function(e){
+      var blob = new Blob([content], { 
+        type: 'text/plain;charset=utf-8' 
+      });
+      var URL = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+ 
+      a.download = fileName;
+      a.href = objURL;
+      a.click();
+    });
+
+    //- function fileBackUp(){
+    //-   var backupChat = document.querySelector('#chat').value;
+    //-   var blob = new Blob([content], { 
+    //-     type: 'text/plain;charset=utf-8' 
+    //-   });
+    //-   var URL = URL.createObjectURL(blob);
+    //-   var a = document.createElement('a');
+    //-   a.href = url; 
+    //-   a.download = "파일명.txt"; 
+    //-   a.click(); 
+    //-   URL.revokeObjectURL(url); 
+    //- }
+
+    //- fs.writeFile('파일경로/파일명','파일에들어갈내용',function(err){ 
+    //-   if (err === null) { 
+    //-     console.log('success'); 
+    //-   } else { 
+    //-     console.log('fail');
+    //-   }
+    //- });
     
+  

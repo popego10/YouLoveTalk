@@ -97,9 +97,9 @@ router.get('/room/:id', async(req, res, next)=>{
 // 		await Room.remove({_id:req.params.id});
 // 		await Chat.remove({room:req.params.id});
 // 		res.send('ok');
-	// setTimeout(()=>{
-	// req.app.get('io').of('/room').emit('removeRoom', req.params.id);
-	// }, 2000);
+// 	setTimeout(()=>{
+// 	req.app.get('io').of('/room').emit('removeRoom', req.params.id);
+// 	}, 2000);
 // 	}catch(error){
 // 		console.error(error);
 // 		next(error);
@@ -161,5 +161,24 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 		next(error);
 	}
 });
+
+//채팅내용 백업을 위한 라우터 설정(임시)
+// var path = 'C:\Users\user\Desktop\backup';
+// var data = 'Hello world!';
+
+// fs.writeFile(path, data, 'utf8', function(error, data){
+// 	if(error){
+// 		console.log('파일 백업 에러');
+// 	}
+// });
+// router.post('/room/:id/backup', async(req, res, next)=>{
+// 	try{
+		
+// 	}catch(error){
+// 		console.error(error);
+// 		next();
+// 	}
+// })
+
 
 module.exports = router;

@@ -1,13 +1,6 @@
 /**
  * http://usejsdoc.org/
  */
-//fontawesome icon 사용하기 위한 npm 설정과 import
-// import { library, icon } from '@fortawesome/fontawesome-svg-core'
-// import { faCamera } from '@fortawesome/free-solid-svg-icons'
-
-// library.add(faCamera)
-//const camera = icon({ prefix: 'fas', iconName: 'camera' })
-
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
@@ -17,8 +10,8 @@ const flash = require('connect-flash');
 const ColorHash = require('color-hash');//아이디를 색으로 구별
 const JSAlert = require('js-alert');//스크립트에서 쓰이는 alert 가능하게 해주는 node module
 //require('dotenv').config({path:'chat.env'});//root경로에 생성하여 전역에서 접근가능하게
+const fs = require('fs')//==>file백업 위한 module
 require('dotenv').config();
-
 
 const webSocket = require('./socket')
 const indexRouter = require('./routes');
@@ -50,6 +43,7 @@ app.use('/gif', express.static(path.join(__dirname,'uploads')));//==>이미지 �
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
 app.use(sessionMiddleware);
 
 // app.use(session({
