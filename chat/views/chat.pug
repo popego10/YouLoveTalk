@@ -112,6 +112,9 @@ block content
       scroll.scrollTop = scroll.scrollHeight;
 
     });
+    socket.on('getCookie', function(){
+      
+    })
     //채팅 전송 이벤트 리스너
     document.querySelector('#chat-form').addEventListener('submit', function (e) {
       e.preventDefault();
