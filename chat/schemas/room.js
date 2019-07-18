@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 var today = new Date();
 today.setHours(today.getHours());
-console.log(today);
+//console.log(today);
 // var today = new Date();
 // today=today.toLocaleString();
 // console.log(today);

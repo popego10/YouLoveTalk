@@ -1,10 +1,11 @@
 extends layout
 
 block content
-  h1 YouLoveTalk
-  //div(style='position:relative;height:50px;')
-  a(href='/room' style='position: absolute; top: 20px; right: 20px;')
-    i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
+  h1(style='margin:20px;') YouLoveTalk
+  
+  a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button')
+    i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;' target='#createRoom' role='button' id='plus')
+
   div(style='margin:20px; border: 3px solid #cbcbcb; padding:30px;')
     fieldset
       table
@@ -13,6 +14,7 @@ block content
             th 종류
             th 채팅방 제목
             th 방장 회원
+            th
         tbody
           for room in rooms
             tr(data-id=room._id)
@@ -20,9 +22,9 @@ block content
               td= room.title
               td(style='color:' + room.owner)= room.owner
               -var password = room.password ? 'true' : 'false';
-              //td: button(data-password=password data-id=room._id).join-btn 입장
-              td: button(data-password=password data-id=room._id).join-btn
-                i.fa.fa-comment-dots(aria-hidden='true' style='font-size:20px;color:#282c37;')
+              td: button(data-password=password data-id=room._id).join-btn 입장
+              //- td: button(data-password=password data-id=room._id).join-btn
+              //-   i.fa.fa-comment-dots(aria-hidden='true' style='font-size:20px;color:#282c37;')
     .error-message= error
  
   script(src='/socket.io/socket.io.js')
@@ -64,6 +66,7 @@ block content
         }
       });
     });
+    //채팅방 입장하는 function
     function addBtnEvent(e) {
       if (e.target.dataset.password === 'true') {
         const password = prompt('비밀번호를 입력하세요');
@@ -75,6 +78,19 @@ block content
     document.querySelectorAll('.join-btn').forEach(function (btn) {
       btn.addEventListener('click', addBtnEvent);
     });
-    //- document.querySelectorAll('.i').forEach(function (btn) {
-    //-   btn.addEventListener('click', addBtnEvent);
-    //- });
+    
+    //- //채팅방 생성 function
+    //- function createRoom(){
+    //-   .modal.fade(tabindex='-1', role='dialog', aria-hidden='true' id='createRoom')
+    //-     .modal-dialog(role='document')
+    //-       .modal-content
+    //-         .modal-body
+    //-           p Content
+    //- }
+
+    //- $(function(){
+    //-   ${#plus}.on('click', function({
+    //-     createRoom();
+    //-   }))
+    //- })
+    

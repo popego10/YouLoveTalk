@@ -1,14 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  div(style='position:relative;')
-    div(style='position:absolute;top:-35px;right:80px;') 참여인원
+  div(style='position:relative;margin:30px;color:#282c37')
+    h1= title
+    a#exit-btn(href='/' style='position:absolute;top:0;right:0;')
+      i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
+    div(style='position:absolute;top:0px;right:60px;') 참여인원
       #number-count= number
-  //a#exit-btn(href='/') 방 나가기
-  a#exit-btn(href='/')
-    i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
-  div(style='margin:50px 30px 30px 30px; border: 3px solid #cbcbcb; padding:30px;')
+  div(style='margin:10px 30px 30px 30px; border: 3px solid #cbcbcb; padding:30px;')
     fieldset
       #chat-list(style='overflow: auto')
         for chat in chats
@@ -32,8 +31,8 @@ block content
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
-        label(for="vote")
-          i.fas.fa-poll(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;')
+        label(for="vote" name='vote')
+          i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal' type='button')
           
         label(for='file')
           i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
@@ -146,18 +145,19 @@ block content
       xhr.open('POST', '/room/#{room._id}/gif');
       xhr.send(formData);
     });
+
     //채팅 백업 리스너 추가
-    document.querySelector('#chat').addEventListener('backup', function(e){
-      var blob = new Blob([content], { 
-        type: 'text/plain;charset=utf-8' 
-      });
-      var URL = URL.createObjectURL(blob);
-      var a = document.createElement('a');
+    //- document.querySelector('#chat').addEventListener('backup', function(e){
+    //-   var blob = new Blob([content], { 
+    //-     type: 'text/plain;charset=utf-8' 
+    //-   });
+    //-   var URL = URL.createObjectURL(blob);
+    //-   var a = document.createElement('a');
  
-      a.download = fileName;
-      a.href = objURL;
-      a.click();
-    });
+    //-   a.download = fileName;
+    //-   a.href = objURL;
+    //-   a.click();
+    //- });
 
     //- function fileBackUp(){
     //-   var backupChat = document.querySelector('#chat').value;
@@ -180,4 +180,33 @@ block content
     //-   }
     //- });
     
-  
+    //채팅 투표 등록 리스너 추가
+    //- document.querySelector([name='vote']).addEventListener('vote', function (e) {
+    //-   .modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+    //-     .modal-dialog(role='document')
+    //-       .modal-content
+    //-         .modal-body
+    //-           h1= 투표등록
+    //- }
+
+    //- #editModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+    //-   .modal-dialog
+    //-     .modal-content
+    //-       .modal-header
+    //-         button.close(type="button", data-dismiss="modal")
+    //-           span(aria-hidden="true") ×
+    //-           span.sr-only Close
+    //-         h4#myModalLabel.modal-title
+    //-           | Edit Resource
+    //-       .modal-body
+    //-         //#editForm.form(role='form' method='GET' action='https://www.google.com/')
+    //-         form(role='form' method='GET' action='https://www.google.com/')
+    //-           div.form-group
+    //-             label(for='name') Name:
+    //-             input#name.form-control(type='text', placeholder='name' name='name')
+    //-           div.form-group
+    //-             label(for='email') Email:
+    //-             input#email.form-control(type='email', placeholder='name@email.com' name='email')
+    //-           button.btn.btn-primary(type="submit", name="asdf") Submit
+    //-           button.btn.btn-default(type="button", data-dismiss="modal")
+    //-             | Close

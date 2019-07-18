@@ -2,10 +2,10 @@
  * http://usejsdoc.org/
  */
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const flash = require('connect-flash');
 const ColorHash = require('color-hash');//아이디를 색으로 구별
 const JSAlert = require('js-alert');//스크립트에서 쓰이는 alert 가능하게 해주는 node module
