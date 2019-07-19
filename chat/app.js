@@ -9,8 +9,11 @@ const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const ColorHash = require('color-hash');//아이디를 색으로 구별
 const JSAlert = require('js-alert');//스크립트에서 쓰이는 alert 가능하게 해주는 node module
+//const bootstrap = require('bootstrap');
+//const jQuery = require('jQuery');
 //require('dotenv').config({path:'chat.env'});//root경로에 생성하여 전역에서 접근가능하게
 const fs = require('fs')//==>file백업 위한 module
+// const jsdom = require('jsdom');
 require('dotenv').config();
 
 const webSocket = require('./socket')
@@ -32,14 +35,18 @@ const sessionMiddleware = session({
 	},
 });
 
-//
-
 app.set('views', path.join(__dirname,'views'));
 app.set('view engine','pug');
 app.set('port', process.env.PORT || 8005);
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname,'public')));
+//app.use('/api', api);
+//app.use('/', express.static(__dirname + '/www'));
+//app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+//app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
+//app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+
 app.use('/gif', express.static(path.join(__dirname,'uploads')));//==>이미지 업로드
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));

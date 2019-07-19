@@ -1,32 +1,68 @@
 extends layout
 
 block content
-  h1(style='margin:20px;') YouLoveTalk
-  
+  h1(style='margin:10px;') YouLoveTalk
+
   a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button')
     i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;' target='#createRoom' role='button' id='plus')
-
-  div(style='margin:20px; border: 3px solid #cbcbcb; padding:30px;')
-    fieldset
-      table
-        thead
-          tr
-            th 종류
-            th 채팅방 제목
-            th 방장 회원
-            th
-        tbody
-          for room in rooms
-            tr(data-id=room._id)
-              td= room.password ? '비밀방' : '공개방'
-              td= room.title
-              td(style='color:' + room.owner)= room.owner
-              -var password = room.password ? 'true' : 'false';
-              td: button(data-password=password data-id=room._id).join-btn 입장
-              //- td: button(data-password=password data-id=room._id).join-btn
-              //-   i.fa.fa-comment-dots(aria-hidden='true' style='font-size:20px;color:#282c37;')
-    .error-message= error
+        
+  i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
  
+  //- button.btn.btn-primary(type='button', data-toggle='modal', data-target='#myModal')  Modal 띄우기
+  
+  //- #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+  //-   .modal-dialog(role='document')
+  //-     .modal-content
+  //-       .modal-header
+  //-         button.close(type='button', data-dismiss='modal', aria-label='Close')
+  //-           span(aria-hidden='true')
+  //-         h1#myModalLabel.modal-title Modal 제목
+  //-       .modal-body  Modal 내용 
+  //-       .modal-footer
+  //-         button.btn.btn-default(type='button', data-dismiss='modal')
+  button.btn.btn-primary(type='button', data-toggle='modal', data-target='#myModal') Modal 띄우기
+  
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4#myModalLabel.modal-title Modal 제목
+        .modal-body
+          | Modal 내용
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') 닫기
+
+
+  .container-fluid.h-100
+    .row.justify-content-center.h-100
+      .col-md-4.col-xl-3.chat
+        .card.mb-sm-3.mb-md-0.contacts_card
+          .card-header
+            .input-group
+              input.form-control.search(type='text', placeholder='Search...', name='')
+              .input-group-prepend
+                span.input-group-text.search_btn
+                  i.fas.fa-search
+          .contacts_body
+            for room in rooms
+              ui.contacts
+                li.active
+                  .d-flex.bd-highlight
+                    .img_cont
+                      img.rounded-circle.user_img(src='http://mblogthumb2.phinf.naver.net/20150427_261/ninevincent_1430122791768m7oO1_JPEG/kakao_1.jpg?type=w2')
+                      span.online_icon
+                    .user_info
+                      span= room.title
+                      div
+                        p= room.password ? '비밀방' : '공개방'
+                        p(style='color:'+ room.owner)= room.owner
+                        -var password = room.password ? 'true' : 'false';
+                        p(data-password=password data-id=room._id).join-btn 입장
+          .card-footer
+
+  //스크립트 
   script(src='/socket.io/socket.io.js')
   script.
     var socket = io.connect('http://192.168.0.13:8005/room', {
@@ -50,7 +86,7 @@ block content
       td = document.createElement('td');
       
       var button = document.createElement('td');
-      //button.textContent = '입장';
+      button.textContent = '입장';
       button.dataset.password = data.password ? 'true' : 'false';
       button.dataset.id = data._id;
       button.addEventListener('click', addBtnEvent);
@@ -77,20 +113,4 @@ block content
     }
     document.querySelectorAll('.join-btn').forEach(function (btn) {
       btn.addEventListener('click', addBtnEvent);
-    });
-    
-    //- //채팅방 생성 function
-    //- function createRoom(){
-    //-   .modal.fade(tabindex='-1', role='dialog', aria-hidden='true' id='createRoom')
-    //-     .modal-dialog(role='document')
-    //-       .modal-content
-    //-         .modal-body
-    //-           p Content
-    //- }
-
-    //- $(function(){
-    //-   ${#plus}.on('click', function({
-    //-     createRoom();
-    //-   }))
-    //- })
-    
+    });       

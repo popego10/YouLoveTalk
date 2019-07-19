@@ -32,8 +32,8 @@ block content
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
         label(for="vote" name='vote')
-          i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal' type='button')
-          
+          i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal')
+            
         label(for='file')
           i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
           //- input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
@@ -73,28 +73,24 @@ block content
         div.classList.add('other');
       }
       //profile 이미지 출력
-      //- var profile = document.createElement();
+      //- var profile = document.createElement('img');
       //- profile.img = img(src="C:\123.jpg");
-      //- div.appendchilde(image);
+      //- img.appendChild(profile);
+      //- var profile = img(src="C:\123.jpg");
+      //- div.appendChild(profile);
       
       //이름
       var name = document.createElement('div');
       name.textContent = data.user;
       div.appendChild(name);
       
-      //채팅내용+시간
+      //채팅내용
       if (data.chat) {
-        div
-          var chat = document.createElement('div');
-          //var time = document.createElement('div');
-          //time.textContent = new Date().toLocaleTimeString();
-          chat.textContent = data.chat;
-          //time.textContent = new Date().toLocaleTimeString();
-          //div.appendChild(time);
-          div.appendChild(chat);
+        var chat = document.createElement('div');
+        chat.textContent = data.chat;
+        div.appendChild(chat);
       } else {
         var gif = document.createElement('img');
-        //- gif.time = rooms.created
         gif.src = '/gif/' + data.gif;
         div.appendChild(gif);
       }
@@ -112,9 +108,6 @@ block content
       scroll.scrollTop = scroll.scrollHeight;
 
     });
-    socket.on('getCookie', function(){
-      
-    })
     //채팅 전송 이벤트 리스너
     document.querySelector('#chat-form').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -185,14 +178,11 @@ block content
     
     //채팅 투표 등록 리스너 추가
     //- document.querySelector([name='vote']).addEventListener('vote', function (e) {
-    //-   .modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
-    //-     .modal-dialog(role='document')
-    //-       .modal-content
-    //-         .modal-body
-    //-           h1= 투표등록
+    //-   callmodal();
     //- }
 
-    //- #editModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+    //- $(function callmodal(){
+    //-   #editModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
     //-   .modal-dialog
     //-     .modal-content
     //-       .modal-header
@@ -213,3 +203,5 @@ block content
     //-           button.btn.btn-primary(type="submit", name="asdf") Submit
     //-           button.btn.btn-default(type="button", data-dismiss="modal")
     //-             | Close
+    //- });
+    

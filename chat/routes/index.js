@@ -92,19 +92,19 @@ router.get('/room/:id', async(req, res, next)=>{
 });
 
 //채팅방 삭제
-router.delete('/room/:id', async(req,res,next)=>{
-	try{
-		await Room.remove({_id:req.params.id});
-		await Chat.remove({room:req.params.id});
-		res.send('ok');
-	setTimeout(()=>{
-	req.app.get('io').of('/room').emit('removeRoom', req.params.id);
-	}, 2000);
-	}catch(error){
-		console.error(error);
-		next(error);
-	}
-});
+// router.delete('/room/:id', async(req,res,next)=>{
+// 	try{
+// 		await Room.remove({_id:req.params.id});
+// 		await Chat.remove({room:req.params.id});
+// 		res.send('ok');
+// 	setTimeout(()=>{
+// 	req.app.get('io').of('/room').emit('removeRoom', req.params.id);
+// 	}, 2000);
+// 	}catch(error){
+// 		console.error(error);
+// 		next(error);
+// 	}
+// });
 
 //채팅 라우터 설정
 router.post('/room/:id/chat', async (req, res, next) => {

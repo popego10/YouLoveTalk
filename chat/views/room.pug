@@ -5,6 +5,20 @@ block content
     div(style='position:relative;margin:30px;') 채팅방 생성
     form(action='/room' method='post')
       div: input(name='title' placeholder='방 제목')
-      div: input(name='max' type='number' placeholder='인원' min='2' value='5')
+      div: input(name='max' type='number' placeholder='인원' min='2' value='5' max='5')
       div: input(name='password' type='password' placeholder='비밀번호 입력' id='password')
       div: button(type='submit') 생성
+
+
+  button.btn.btn-primary(type='button', data-toggle='modal', data-target='#myModal')  Modal 띄우기
+    
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true')
+          h4#myModalLabel.modal-title Modal 제목
+        .modal-body  Modal 내용 
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal')
