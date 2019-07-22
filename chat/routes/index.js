@@ -20,6 +20,7 @@ const router = express.Router();
 // 	});
 // });
 
+//채팅방 목록 띄우는 라우터
 router.get('/', async (req, res, next) =>{
 	try{
 		const rooms = await Room.find({});
@@ -30,10 +31,11 @@ router.get('/', async (req, res, next) =>{
 	}
 });
 
+//채팅방 생성 라우터(get)
 router.get('/room', (req, res) => {
 	res.render('room', {title:'채팅방 생성'});
 });
-//채팅방 생성 라우터
+//채팅방 생성 라우터(post)
 router.post('/room', async(req, res, next) => {
 	try{
 		const room = new Room({
@@ -51,6 +53,7 @@ router.post('/room', async(req, res, next) => {
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
 		res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+		//res.redirect(`/`);
 	}catch(error){
 		console.error(error);
 		next(error);
