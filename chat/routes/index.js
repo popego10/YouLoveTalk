@@ -37,6 +37,7 @@ router.get('/room', (req, res) => {
 });
 //채팅방 생성 라우터(post)
 router.post('/room', async(req, res, next) => {
+	console.log("/room 모달");
 	try{
 		const room = new Room({
 			title: req.body.title, //채팅방제목
@@ -52,8 +53,8 @@ router.post('/room', async(req, res, next) => {
 		const newRoom = await room.save();
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
-		res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
-		//res.redirect(`/`);
+		//res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+		res.redirect(`/`);
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -182,6 +183,5 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 // 		next();
 // 	}
 // })
-
 
 module.exports = router;

@@ -2,12 +2,16 @@ extends layout
 
 block content
   
-  img(src="http://192.168.0.94:8080//resources/images/youloveplan_logo.png" width='300px')
+  //img(src="http://192.168.0.94:8080//resources/images/youloveplan_logo.png" width='300px')
+  //img(src="http://192.168.0.13:8005//public/youlovetalk_logo.png" width='300px')
+  //img(src="C:/Users/user/git/YouLoveNamuPjt/Namu/WebContent/resources/images/youlovetalk_logo.png" width='300px')
+  img(src='http://192.168.0.13:8005//public/youlovetalk_logo.png' width='300px')
   
-  a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button') 생성
-    i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
   
-  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 20px; right: 20px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal' href='/room')
+  //- a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button') 생성
+  //-   i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
+  
+  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 20px; right: 20px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
   
   #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog(role='document')
@@ -17,16 +21,16 @@ block content
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             h4i.fa.fa-window-close(aria-hidden='true' id='createCancel')
         .modal-body 
-          form(method='post' action='/room')
+          form(name='sendform' method='post' action='/room')
             label(for="title") 채팅방 제목
-            input.form-control(type='text' name='title' placeholder='방 제목')
+            input.form-control(type='text' name='title' id='title' placeholder='방 제목' )
             label(for="max") 채팅방 인원
-            input.form-control(name='max' type='number' placeholder='인원' min='2' value='5' max='5')
+            input.form-control(name='max' id='max' type='number' placeholder='인원' min='2' value='5' max='5')
             label(for="password") 패스워드
             input.form-control(name='password' type='password' placeholder='비밀번호 입력' id='password')
-            #createRoom.btn.btn-primary(type='submit' data-dismiss='modal' onClick='javascript:createRoom()') 생성
         .modal-footer
-               
+          #createRoom.btn.btn-primary(data-dismiss='modal' onclick='javascript:createRoom()') 생성
+
   .container-fluid.h-100
     .row.justify-content-center.h-100
       .col-md-4.col-xl-3.chat
@@ -108,16 +112,17 @@ block content
     });
     
     function createRoom(){
-      var title = document.getElementsByName('title').value();
-      var max = document.getElementsByName('max').value();
-      var password = document.getElementsByName('password').value();
-
-      console.log('dfdsf');
-
-      document.forms.submit();
-      
-    };
-  
+      // jQuery 로 수정
+      //var title = $('#title').val();      
+      //var max = $('#max').val();  
+      //var password = $('#password').val();  
+        
+      //sendform.titleTxt.value  = title;
+      //sendform.maxTxt.value  = max;
+      //sendform.passwordTxt.value  = password;
+      sendform.action ='/room';
+      sendform.submit();
+    }
 
     
 
