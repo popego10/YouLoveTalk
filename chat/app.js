@@ -26,11 +26,12 @@ connect();
 //sessionMiddleware를 이용하여  session에 회원정보 저장
 const sessionMiddleware = session({
 	resave:false,
-	saveUninitialized:false,
+	saveUninitialized:true,
 	secret: process.env.COOKIE_SECRET,
 	cookie:{
 		httpOnly:true,
 		secure:false,
+		maxAge: 24000*60*60,
 	},
 });
 
@@ -69,6 +70,15 @@ app.use((req, res, next)=>{
 	}
 	next();
 });
+
+// app.use((req, res, next)=>{
+// 	req.session.nickname = req.param('nickname');
+// 	req.session.profile = req.param('profile');
+// 	req.session.save(function(){
+// 		console.log('nickname = ' + req.session.nickname);
+// 		next();
+// 	});
+// });
 
 app.use('/',indexRouter);
 

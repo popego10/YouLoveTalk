@@ -9,42 +9,62 @@ const Chat = require('../schemas/chat');
 
 const router = express.Router();
 
-/* GET home page. */////요기 체크 
-// router.get('/', function(req, res, next) {
-// 	Room.find({})
-// 	.then((Room)=>{
-// 		res.render('main', {rooms, title:'채팅방', error : req.flash('roomError')});
-// 	}).catch((err)=>{
-// 		console.error(err);
-// 		next(err);
-// 	});
-// });
-
 //채팅방 목록 띄우는 라우터
 router.get('/', async (req, res, next) =>{
 	try{
+		req.session.nickname = req.param('nickname');
+		req.session.profile = req.param('profile');
+		
 		const rooms = await Room.find({});
-		res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
+		req.session.save(function(){
+			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
+		});
+		//res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
 	}catch(error){
 		console.error(error);
 		next(error);
 	}
 });
 
+// router.post('/', async (req, res, next) =>{
+// 	try{
+// 		req.session.nickname = req.param('nickname');
+// 		req.session.profile = req.param('profile');
+// 		const rooms = await Room.find({});
+// 		req.session.save(function(){
+// 			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
+// 		});
+// 	}catch(error){
+// 		console.error(error);
+// 		next(error);
+// 	}
+// });
+
 //채팅방 생성 라우터(get)
-router.get('/room', (req, res) => {
-	res.render('room', {title:'채팅방 생성'});
-});
+// router.get('/room', (req, res) => {
+// 	var nickname = req.param('nickname');
+// 	console.log('nickname='+nickname);
+// 	var profile = req.param('profile');
+// 	console.log('profile='+profile);
+// 	res.render('room', {title:'채팅방 생성'});
+// });
+
 //채팅방 생성 라우터(post)
 router.post('/room', async(req, res, next) => {
 	console.log("/room 모달");
 	try{
+		// var nickname = req.param('nickname');
+		// console.log('nickname='+nickname);
+		// var profile = req.param('profile');
+		// console.log('profile='+profile);
 		const room = new Room({
 			title: req.body.title, //채팅방제목
 			max: req.body.max, //채팅방 인원
-			owner: req.session.color, //채팅방장
+			owner: req.session.nickname,//채팅 방장
 			password: req.body.password, //채팅방 비밀번호
+			profile: "http://192.168.0.13:8080//resources/images/profile/"+req.session.profile,
 		});
+
 		if(!room.password){
 			JSAlert.alert("공개방 생성");
 		}else{
@@ -53,8 +73,8 @@ router.post('/room', async(req, res, next) => {
 		const newRoom = await room.save();
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
-		//res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
-		res.redirect(`/`);
+		res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+		
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -86,8 +106,8 @@ router.get('/room/:id', async(req, res, next)=>{
 			title: room.title,
 			chats,
 			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
-			user: req.session.color,
-			//createdAt: chats.createdAt,
+			user: req.session.nickname,
+			profile: req.session.profile,
 		});
 	}catch(error){
 		console.error(error);
@@ -115,7 +135,7 @@ router.post('/room/:id/chat', async (req, res, next) => {
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.session.color,
+			user: req.session.nickname,
 			chat: req.body.chat,
 			createdAt: req.body.createdAt,
 		});
@@ -152,7 +172,7 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.session.color,
+			user: req.session.nickname,
 			gif: req.file.filename,
 			createdAt: req.body.createdAt,
 		});

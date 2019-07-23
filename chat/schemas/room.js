@@ -33,5 +33,6 @@ const roomSchema = new Schema({
 		type : Date,
 		default : today,
 	},//생성시간
+	profile : String,
 });
 module.exports = mongoose.model('Room', roomSchema);

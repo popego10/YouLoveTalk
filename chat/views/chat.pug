@@ -3,7 +3,7 @@ extends layout
 block content
   div(style='position:relative;margin:30px;color:#282c37')
     h1= title
-    a#exit-btn(href='/' style='position:absolute;top:0;right:0;')
+    a#exit-btn(href='?nickname=${req.session.nickname}' style='position:absolute;top:0;right:0;')
       i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
     div(style='position:absolute;top:0px;right:60px;') 참여인원
       #number-count= number
@@ -12,7 +12,7 @@ block content
       #chat-list(style='overflow: auto')
         for chat in chats
           if chat.user === user
-            .mine(style='color:' + chat.user)
+            .mine
               div= chat.user
               if chat.gif
                 img(src='/gif/' + chat.gif)
@@ -22,7 +22,8 @@ block content
             .system
               div= chat.chat
           else
-            .other(style='color:' + chat.user)
+            //.other(style='color:' + chat.user)
+            .other
               div= chat.user
               if chat.gif
                 img(src='/gif/' + chat.gif)
@@ -31,11 +32,11 @@ block content
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
-        label(for="vote" name='vote')
-          i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal')
+        //- label(for="vote" name='vote')
+        //-   i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal')
             
-        label(for='file')
-          i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
+        //- label(for='file')
+        //-   i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
           //- input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
         label(for='gif')
           i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
@@ -74,11 +75,9 @@ block content
       }
       //profile 이미지 출력
       //- var profile = document.createElement('img');
-      //- profile.img = img(src="C:\123.jpg");
+      //- profile.img = data.profile;
       //- img.appendChild(profile);
-      //- var profile = img(src="C:\123.jpg");
-      //- div.appendChild(profile);
-      
+           
       //이름
       var name = document.createElement('div');
       name.textContent = data.user;

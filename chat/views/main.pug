@@ -4,14 +4,12 @@ block content
   
   //img(src="http://192.168.0.94:8080//resources/images/youloveplan_logo.png" width='300px')
   //img(src="http://192.168.0.13:8005//public/youlovetalk_logo.png" width='300px')
-  //img(src="C:/Users/user/git/YouLoveNamuPjt/Namu/WebContent/resources/images/youlovetalk_logo.png" width='300px')
-  img(src='http://192.168.0.13:8005//public/youlovetalk_logo.png' width='300px')
-  
+  img(src="http://192.168.0.13:8080//resources/images/youlovetalk_logo.png" width='300px')
   
   //- a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button') 생성
   //-   i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
   
-  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 20px; right: 20px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
+  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 60px; right: 25px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
   
   #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog(role='document')
@@ -28,6 +26,8 @@ block content
             input.form-control(name='max' id='max' type='number' placeholder='인원' min='2' value='5' max='5')
             label(for="password") 패스워드
             input.form-control(name='password' type='password' placeholder='비밀번호 입력' id='password')
+            //input.form-control(name='nickname' type='hidden' id='nickname' value='#{nickname}')
+            //input.form-control(name='nickname' type='hidden' id='nickname' value="req.parm('nickname')")
         .modal-footer
           #createRoom.btn.btn-primary(data-dismiss='modal' onclick='javascript:createRoom()') 생성
 
@@ -48,12 +48,14 @@ block content
                   .d-flex.bd-highlight
                     .img_cont
                       img.rounded-circle.user_img(src='http://mblogthumb2.phinf.naver.net/20150427_261/ninevincent_1430122791768m7oO1_JPEG/kakao_1.jpg?type=w2')
+                      //img.rounded-circle.user_img(src='http://192.168.0.13:8080//resources/images/profile/'+)
                       span.online_icon
                     .user_info
                       span= room.title
                       div
                         p= room.password ? '비밀방' : '공개방'
-                        p(style='color:'+ room.owner)= room.owner
+                        //- p(style='color:'+ room.owner)= room.owner
+                        p= room.owner
                         -var password = room.password ? 'true' : 'false';
                         p(data-password=password data-id=room._id).join-btn 입장
           .card-footer

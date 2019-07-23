@@ -30,5 +30,6 @@ const chatSchema = new Schema({
 		type : Date,
 		default : Date.now,
 	},// 생성시간
+	profile: String,
 });
 module.exports = mongoose.model('Chat', chatSchema);
