@@ -1,33 +1,34 @@
 extends layout
 
 block content
-  
-  //img(src="http://192.168.0.94:8080//resources/images/youloveplan_logo.png" width='300px')
-  //img(src="http://192.168.0.13:8005//public/youlovetalk_logo.png" width='300px')
-  img(src="http://192.168.0.13:8080//resources/images/youlovetalk_logo.png" width='300px')
+ 
+  img(src="http://192.168.0.13:8080//resources/images/youlovetalk_logo.png" width='250px')
   
   //- a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button') 생성
   //-   i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
   
-  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 60px; right: 25px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
+  i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 40px; right: 25px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
   
   #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog(role='document')
       .modal-content
         .modal-header
-          h3#myModalLabel.modal-title(style='position: absolute; left: 20px;') 채팅방 개설
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            h4i.fa.fa-window-close(aria-hidden='true' id='createCancel')
+          h3#myModalLabel.modal-title(style='position: absolute; left: 20px;')
+          button.close(type='button', data-dismiss='modal', aria-label='Close' id='cancel')
+            h4i.fa.fa-window-close(aria-hidden='true')
         .modal-body 
-          form(name='sendform' method='post' action='/room')
+          form(name='sendform' method='post' action='/room' enctype='multipart/form-data')
             label(for="title") 채팅방 제목
-            input.form-control(type='text' name='title' id='title' placeholder='방 제목' )
+            input.form-control(name='title' type='text' id='title' placeholder='방 제목')
             label(for="max") 채팅방 인원
-            input.form-control(name='max' id='max' type='number' placeholder='인원' min='2' value='5' max='5')
+            input.form-control(name='max' type='number' id='max' placeholder='인원' min='2' value='5' max='5')
             label(for="password") 패스워드
-            input.form-control(name='password' type='password' placeholder='비밀번호 입력' id='password')
-            //input.form-control(name='nickname' type='hidden' id='nickname' value='#{nickname}')
-            //input.form-control(name='nickname' type='hidden' id='nickname' value="req.parm('nickname')")
+            input.form-control(name='password' type='password' id='password' placeholder='비밀번호 입력')
+            label(for="titleImg") 채팅방 이미지
+            div.filebox.preview-image
+              input.upload-name(id='titleImg' name='titleImg' disabled="disabled" placeholder='파일명')
+              label(for="input-file") 업로드
+              input.upload-hidden(type="file" id="input-file" style='margin:20px;')
         .modal-footer
           #createRoom.btn.btn-primary(data-dismiss='modal' onclick='javascript:createRoom()') 생성
 
@@ -49,6 +50,7 @@ block content
                     .img_cont
                       img.rounded-circle.user_img(src='http://mblogthumb2.phinf.naver.net/20150427_261/ninevincent_1430122791768m7oO1_JPEG/kakao_1.jpg?type=w2')
                       //img.rounded-circle.user_img(src='http://192.168.0.13:8080//resources/images/profile/'+)
+                      //img.rounded-circle.user_img(src=)
                       span.online_icon
                     .user_info
                       span= room.title
@@ -125,6 +127,51 @@ block content
       sendform.action ='/room';
       sendform.submit();
     }
+
+    //모달창 닫으면 입력form 초기화 function
+    $(document).ready(function(){
+      $('#cancel').on('click', function(){
+        $(this).find('form')[0].reset();
+      });
+    });
+    
+    //업로드하는 파일명만 나오게
+    $(document).ready(function(){ 
+      $('.filebox .upload-hidden').on('change', function(){ 
+        // 값이 변경되면 
+        if(window.FileReader){ 
+          var filename = $(this)[0].files[0].name;
+        } else { 
+          var filename = $(this).val().split('/').pop().split('\\').pop(); 
+        } // 추출한 파일명 삽입 
+        $(this).siblings('.upload-name').val(filename); 
+      }); 
+    }); 
+
+    //preview image 보이기 
+    $('.preview-image .upload-hidden').on('change', function(){ 
+      var parent = $(this).parent();
+      parent.children('.upload-display').remove();
+      if(window.FileReader){
+        //image 파일만 들어오게
+        if (!$(this)[0].files[0].type.match(/image\//)) 
+        return;
+        //filereader이용해서 preview 
+        var reader = new FileReader();
+        reader.onload = function(e){
+          var src = e.target.result;
+          parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>'); } 
+          reader.readAsDataURL($(this)[0].files[0]); 
+        } else { 
+          $(this)[0].select(); $(this)[0].blur(); 
+          var imgSrc = document.selection.createRange().text; 
+          parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb"></div></div>'); 
+          var img = $(this).siblings('.upload-display').find('img'); 
+          img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";} 
+        });
+
+
+
 
     
 

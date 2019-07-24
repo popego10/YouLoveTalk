@@ -13,8 +13,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) =>{
 	try{
 		req.session.nickname = req.param('nickname');
-		req.session.profile = req.param('profile');
-		
+		//req.session.profile = req.param('profile');
 		const rooms = await Room.find({});
 		req.session.save(function(){
 			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
@@ -50,20 +49,38 @@ router.get('/', async (req, res, next) =>{
 // });
 
 //채팅방 생성 라우터(post)
-router.post('/room', async(req, res, next) => {
+fs.readdir('titleImg', (error)=>{
+	if(error){
+		console.error('저장경로가 없음으로 폴더 생성');
+		fs.mkdirSync('titleImg');//==>파일 저장경로 생성하는 메서드
+	}
+});
+const titleImg = multer({
+	storage : multer.diskStorage({
+		destination(req, file, callback){
+			callback(null, 'titleImg/');
+		},
+		filename(req, file, callback){
+			const extension = path.extname(file.originalname);
+			//var basename = path.basename(file.originalname+'_'+new Date().valueOf(), extension);
+			callback(null, path.basename(file.originalname, extension) + '_' + new Date().valueOf() + extension);
+			console.log('성공');
+		},
+	}),
+	//limits : {fileSize : 1024*1024},
+});
+router.post('/room', titleImg.single('gif'), async(req, res, next) => {
 	console.log("/room 모달");
 	try{
-		// var nickname = req.param('nickname');
-		// console.log('nickname='+nickname);
-		// var profile = req.param('profile');
-		// console.log('profile='+profile);
 		const room = new Room({
 			title: req.body.title, //채팅방제목
 			max: req.body.max, //채팅방 인원
 			owner: req.session.nickname,//채팅 방장
 			password: req.body.password, //채팅방 비밀번호
-			profile: "http://192.168.0.13:8080//resources/images/profile/"+req.session.profile,
+			//profile: "http://192.168.0.13:8080//resources/images/profile/"+req.session.profile,
+			titleImg: req.file.filename,//채팅방 메인 이미지
 		});
+		console.log(req.file);
 
 		if(!room.password){
 			JSAlert.alert("공개방 생성");
@@ -74,7 +91,6 @@ router.post('/room', async(req, res, next) => {
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
 		res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
-		
 	}catch(error){
 		console.error(error);
 		next(error);

@@ -43,6 +43,8 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname,'public')));
 
 app.use('/gif', express.static(path.join(__dirname,'uploads')));//==>이미지 업로드
+app.use('/gif', express.static(path.join(__dirname, 'titleImg')));//==>채팅방 메인 이미지 업로드
+
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser(process.env.COOKIE_SECRET));

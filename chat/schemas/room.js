@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 var today = new Date();
 today.setHours(today.getHours());
+
+//var titleImg = 
 //console.log(today);
 // var today = new Date();
 // today=today.toLocaleString();
@@ -24,7 +26,7 @@ const roomSchema = new Schema({
 	},//최대 수용 인원
 	owner : {
 		type : String,
-		required : true,
+		//required : true,
 	},//방장
 	password : {
 		type : String,
@@ -33,6 +35,13 @@ const roomSchema = new Schema({
 		type : Date,
 		default : today,
 	},//생성시간
-	profile : String,
+	titleImg : {
+		type : String,
+		//default : "http://192.168.0.13:8080//resources/images/youlovetalk_logo.png",
+	},
+	// titleImg : {
+	// 	data: Buffer, 
+	// 	contentType: String
+	// },
 });
 module.exports = mongoose.model('Room', roomSchema);
