@@ -37,11 +37,6 @@ const roomSchema = new Schema({
 	},//생성시간
 	titleImg : {
 		type : String,
-		//default : "http://192.168.0.13:8080//resources/images/youlovetalk_logo.png",
 	},
-	// titleImg : {
-	// 	data: Buffer, 
-	// 	contentType: String
-	// },
 });
 module.exports = mongoose.model('Room', roomSchema);

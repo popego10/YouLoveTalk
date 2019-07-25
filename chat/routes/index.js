@@ -48,28 +48,28 @@ router.get('/', async (req, res, next) =>{
 // 	res.render('room', {title:'채팅방 생성'});
 // });
 
-//채팅방 생성 라우터(post)
+//채팅방 생성 라우터(post)+titleImg 저장하는 공간 생성
 fs.readdir('titleImg', (error)=>{
 	if(error){
 		console.error('저장경로가 없음으로 폴더 생성');
-		fs.mkdirSync('titleImg');//==>파일 저장경로 생성하는 메서드
+		fs.mkdirSync('titleImg');//==>파일 저장경로 생성하는 메서드(titleImg)
 	}
 });
 const titleImg = multer({
 	storage : multer.diskStorage({
+		//저장할 폴더
 		destination(req, file, callback){
 			callback(null, 'titleImg/');
 		},
+		//저장하는 파일명
 		filename(req, file, callback){
 			const extension = path.extname(file.originalname);
-			//var basename = path.basename(file.originalname+'_'+new Date().valueOf(), extension);
 			callback(null, path.basename(file.originalname, extension) + '_' + new Date().valueOf() + extension);
-			console.log('성공');
 		},
 	}),
-	//limits : {fileSize : 1024*1024},
+	limits : {fileSize : 512*512},
 });
-router.post('/room', titleImg.single('gif'), async(req, res, next) => {
+router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 	console.log("/room 모달");
 	try{
 		const room = new Room({
@@ -77,11 +77,9 @@ router.post('/room', titleImg.single('gif'), async(req, res, next) => {
 			max: req.body.max, //채팅방 인원
 			owner: req.session.nickname,//채팅 방장
 			password: req.body.password, //채팅방 비밀번호
-			//profile: "http://192.168.0.13:8080//resources/images/profile/"+req.session.profile,
 			titleImg: req.file.filename,//채팅방 메인 이미지
 		});
-		console.log(req.file);
-
+		//console.log(req.file);
 		if(!room.password){
 			JSAlert.alert("공개방 생성");
 		}else{

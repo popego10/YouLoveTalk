@@ -49,6 +49,9 @@ label[for='gif'] { cursor: pointer; padding: 5px; }
   background-color: #216282; 
   opacity: 0.9; 
 } 
+.modal-body label {
+margin-top: 20px; margin-left:5px;
+}
 /* #cancel { 
   width: 127px; height: 48px; 
   text-align: center; 

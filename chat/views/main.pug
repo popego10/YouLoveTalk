@@ -12,26 +12,30 @@ block content
   #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog(role='document')
       .modal-content
-        .modal-header
-          h3#myModalLabel.modal-title(style='position: absolute; left: 20px;')
+        .modal-header(style="position:relative;")
+          //- h3#myModalLabel.modal-title(style='position: absolute; left: 20px;')
+          div(style="position:absolute; top:15px; right:50px;")  
+            span(style="display:inline; position:relative;")
+              h5.strong.text-danger(style="display:inline; position:absolute; top:5px; right:-10px;") *　
+            h5.text-muted(style="display:inline") 필수 항목 입니다.
           button.close(type='button', data-dismiss='modal', aria-label='Close' id='cancel')
             h4i.fa.fa-window-close(aria-hidden='true')
         .modal-body 
           form(name='sendform' method='post' action='/room' enctype='multipart/form-data')
-            label(for="title") 채팅방 제목
+            label(for="title") * 채팅방 제목
             input.form-control(name='title' type='text' id='title' placeholder='방 제목')
-            label(for="max") 채팅방 인원
+            label(for="max") * 채팅방 인원
             input.form-control(name='max' type='number' id='max' placeholder='인원' min='2' value='5' max='5')
             label(for="password") 패스워드
             input.form-control(name='password' type='password' id='password' placeholder='비밀번호 입력')
-            label(for="titleImg") 채팅방 이미지
+            label(for="titleImg") * 채팅방 이미지
             div.filebox.preview-image
               input.upload-name(id='titleImg' name='titleImg' disabled="disabled" placeholder='파일명')
               label(for="input-file") 업로드
-              input.upload-hidden(type="file" id="input-file" style='margin:20px;')
+              input.upload-hidden(type="file" id="input-file" style='margin:20px;' name='titleImg')
         .modal-footer
           #createRoom.btn.btn-primary(data-dismiss='modal' onclick='javascript:createRoom()') 생성
-
+          
   .container-fluid.h-100
     .row.justify-content-center.h-100
       .col-md-4.col-xl-3.chat
@@ -48,15 +52,12 @@ block content
                 li.active
                   .d-flex.bd-highlight
                     .img_cont
-                      img.rounded-circle.user_img(src='http://mblogthumb2.phinf.naver.net/20150427_261/ninevincent_1430122791768m7oO1_JPEG/kakao_1.jpg?type=w2')
-                      //img.rounded-circle.user_img(src='http://192.168.0.13:8080//resources/images/profile/'+)
-                      //img.rounded-circle.user_img(src=)
+                      img.rounded-circle.user_img(src='/room/'+room.titleImg)
                       span.online_icon
                     .user_info
                       span= room.title
                       div
                         p= room.password ? '비밀방' : '공개방'
-                        //- p(style='color:'+ room.owner)= room.owner
                         p= room.owner
                         -var password = room.password ? 'true' : 'false';
                         p(data-password=password data-id=room._id).join-btn 입장
@@ -103,11 +104,19 @@ block content
       });
     });
     //채팅방 입장하는 function
+    //- function addBtnEvent(e) {
+    //-   if (e.target.dataset.password === 'true') {
+    //-     const password = prompt('비밀번호를 입력하세요');
+    //-     location.href = '/room/' + e.target.dataset.id + '?password=' + password;
+    //-   } else {
+    //-     //location.href = '/room/' + e.target.dataset.id;
+    //-   }
+    //- }
     function addBtnEvent(e) {
-      if (e.target.dataset.password === 'true') {
-        const password = prompt('비밀번호를 입력하세요');
+      if (e.target.dataset.password === 'true') {//비밀방
+        const password = prompt('비밀번호를 입력하세요','');
         location.href = '/room/' + e.target.dataset.id + '?password=' + password;
-      } else {
+      } else {//공개방
         location.href = '/room/' + e.target.dataset.id;
       }
     }
@@ -128,7 +137,7 @@ block content
       sendform.submit();
     }
 
-    //모달창 닫으면 입력form 초기화 function
+    //모달창 닫으면 입력form 초기화 function(왜 안먹지)
     $(document).ready(function(){
       $('#cancel').on('click', function(){
         $(this).find('form')[0].reset();
@@ -169,6 +178,8 @@ block content
           var img = $(this).siblings('.upload-display').find('img'); 
           img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";} 
         });
+
+    
 
 
 
