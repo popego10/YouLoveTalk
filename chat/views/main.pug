@@ -2,18 +2,14 @@ extends layout
 
 block content
  
-  img(src="http://192.168.0.13:8080//resources/images/youlovetalk_logo.png" width='250px')
-  
-  //- a(toggle='modal' href='/room' style='position: absolute; top: 20px; right: 20px;' target='#createRoom' role='button') 생성
-  //-   i.fa.fa-plus-square(aria-hidden='true' style='font-size:50px;color:#f2c029;')
-  
+  img(src="http://192.168.0.94:8080//resources/images/youlovetalk_logo.png" width='250px')
+    
   i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 40px; right: 25px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
   
   #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
     .modal-dialog(role='document')
       .modal-content
         .modal-header(style="position:relative;")
-          //- h3#myModalLabel.modal-title(style='position: absolute; left: 20px;')
           div(style="position:absolute; top:15px; right:50px;")  
             span(style="display:inline; position:relative;")
               h5.strong.text-danger(style="display:inline; position:absolute; top:5px; right:-10px;") *　
@@ -42,10 +38,11 @@ block content
         .card.mb-sm-3.mb-md-0.contacts_card
           .card-header
             .input-group
-              input.form-control.search(type='text', placeholder='Search...', name='')
-              .input-group-prepend
-                span.input-group-text.search_btn
-                  i.fas.fa-search
+              form(action="/search" name='searchRoom' style='position:relative; width:100%;' method='get')
+                input.form-control.search(type='text', placeholder='검색어를 입력하세요.' style='display:inline-block; width:100%; border-radius:15px !important;')
+                span.input-group-text.search_btn(style='display:inline-block; height:100%; position:absolute; top:0; right:0;')
+                  .i.fas.fa-search(onclick='javascript:searchRoom()')
+                      
           .contacts_body
             for room in rooms
               ui.contacts
@@ -58,9 +55,10 @@ block content
                       span= room.title
                       div
                         p= room.password ? '비밀방' : '공개방'
-                        p= room.owner
                         -var password = room.password ? 'true' : 'false';
-                        p(data-password=password data-id=room._id).join-btn 입장
+                        span.enter_room
+                          p= room.owner
+                          p(data-password=password data-id=room._id).join-btn 입장
           .card-footer
 
   //스크립트 
@@ -70,31 +68,31 @@ block content
       path: '/socket.io'
     });
     socket.on('newRoom', function (data) {
-      //- var tr = document.createElement('tr');
-      //- var td = document.createElement('td');
+      var tr = document.createElement('tr');
+      var td = document.createElement('td');
       
-      //- td.textContent = data.password ? '비밀방' : '공개방';
-      //- tr.appendChild(td);
+      td.textContent = data.password ? '비밀방' : '공개방';
+      tr.prependChild(td);
       
-      //- td = document.createElement('td');
-      //- td.textContent = data.title;
-      //- tr.appendChild(td);
+      td = document.createElement('td');
+      td.textContent = data.title;
+      tr.prependChild(td);
                   
-      //- td = document.createElement('td');
-      //- td.style.color = data.owner;
-      //- td.textContent = data.owner;
-      //- tr.appendChild(td);
-      //- td = document.createElement('td');
+      td = document.createElement('td');
+      td.style.color = data.owner;
+      td.textContent = data.owner;
+      tr.prependChild(td);
+      td = document.createElement('td');
       
-      //- var button = document.createElement('td');
-      //- button.textContent = '입장';
-      //- button.dataset.password = data.password ? 'true' : 'false';
-      //- button.dataset.id = data._id;
-      //- button.addEventListener('click', addBtnEvent);
-      //- td.appendChild(button);
-      //- tr.appendChild(td);
-      //- tr.dataset.id = data._id;
-      //- document.querySelector('table tbody').appendChild(tr);
+      var button = document.createElement('td');
+      button.textContent = '입장';
+      button.dataset.password = data.password ? 'true' : 'false';
+      button.dataset.id = data._id;
+      button.addEventListener('click', addBtnEvent);
+      td.prependChild(button);
+      tr.prependChild(td);
+      tr.dataset.id = data._id;
+      document.querySelector('table tbody').appendChild(tr);
     });
     socket.on('removeRoom', function (data) {
       document.querySelectorAll('tbody tr').forEach(function (tr) {
@@ -104,14 +102,6 @@ block content
       });
     });
     //채팅방 입장하는 function
-    //- function addBtnEvent(e) {
-    //-   if (e.target.dataset.password === 'true') {
-    //-     const password = prompt('비밀번호를 입력하세요');
-    //-     location.href = '/room/' + e.target.dataset.id + '?password=' + password;
-    //-   } else {
-    //-     //location.href = '/room/' + e.target.dataset.id;
-    //-   }
-    //- }
     function addBtnEvent(e) {
       if (e.target.dataset.password === 'true') {//비밀방
         const password = prompt('비밀번호를 입력하세요','');
@@ -120,6 +110,12 @@ block content
         location.href = '/room/' + e.target.dataset.id;
       }
     }
+    //- $(document).forEach(function(){
+    //-   $('#enter').on('click', function(){
+    //-     addBtnEvent(e);
+    //-   })
+    //- });
+      
     document.querySelectorAll('.join-btn').forEach(function (btn) {
       btn.addEventListener('click', addBtnEvent);
     });
@@ -135,6 +131,12 @@ block content
       //sendform.passwordTxt.value  = password;
       sendform.action ='/room';
       sendform.submit();
+    }
+
+    //검색하는 function
+    function searchRoom(){
+      searchRoom.action = '/search';
+      searchRoom.submit();
     }
 
     //모달창 닫으면 입력form 초기화 function(왜 안먹지)

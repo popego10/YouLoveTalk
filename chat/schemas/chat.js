@@ -22,7 +22,7 @@ const chatSchema = new Schema({
 	},//채팅방 아이디
 	user : {
 		type : String,
-		required : true,
+		//required : true,
 	},//채팅유저
 	chat : String, // 채팅내역
 	gif : String, // 이미지 주소

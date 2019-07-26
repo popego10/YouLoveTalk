@@ -120,33 +120,40 @@ bottom: -27px;
 right: -30px;
 border:1.5px solid white;
 }
-.offline{
+/* .offline{
 background-color: #c23616 !important;
+} */
+.offline{
+position: absolute;
+height: 15px;
+width:15px;
+background-color: #c23616;
+border-radius: 50%;
+bottom: -27px;
+right: -30px;
+border:1.5px solid white;   
 }
 .user_info{
-    width:100%;
+width:100%;
 position: relative;
 margin-top: auto;
-margin-bottom: auto;
+margin-bottom: -10px;
 margin-left: 45px;
 color: #282c37;
 }
-.user_info span{
+.user_info > span{
 display: inline-block;
 margin-top: 10px;
 font-size: 25px;
 }
-.user_info div{
-    height:60px;
-}
 .user_info p{
 font-size: 16px;
 }
-.user_info p:last-child{
-margin-top: 0px;
-position: absolute;
-bottom:0;
-right:0;
+.user_info .enter_room p:first-child {
+    float:left;
+}
+.user_info .enter_room p:last-child {
+    float:right; cursor: pointer;
 }
 .video_cam{
 margin-left: 50px;

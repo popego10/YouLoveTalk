@@ -3,7 +3,7 @@ extends layout
 block content
   div(style='position:relative;margin:30px;color:#282c37')
     h1= title
-    a#exit-btn(href='?nickname=${req.session.nickname}' style='position:absolute;top:0;right:0;')
+    a#exit-btn(href='/' style='position:absolute;top:0;right:0;')
       i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
     div(style='position:absolute;top:0px;right:60px;') 참여인원
       #number-count= number
@@ -32,17 +32,15 @@ block content
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
-        //- label(for="vote" name='vote')
-        //-   i.fas.fa-poll#editModal(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:15px;' target='#editModal')
-            
         //- label(for='file')
-        //-   i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
-          //- input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
+        //-   i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;' onClick='fileBackUp();')
+        //-   input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
         label(for='gif')
           i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
           input#gif(type='file' name='gif' accept='image/gif')
       input#chat(name='chat' autofocus='')
       button(type='submit') 전송
+  
   script(src='/socket.io/socket.io.js')
   script.
     var socket = io.connect('http://192.168.0.13:8005/chat', {
@@ -142,7 +140,7 @@ block content
     });
 
     //채팅 백업 리스너 추가
-    //- document.querySelector('#chat').addEventListener('backup', function(e){
+    //- document.querySelector('#chat').addEventListener('click', function(e){
     //-   var blob = new Blob([content], { 
     //-     type: 'text/plain;charset=utf-8' 
     //-   });
@@ -175,32 +173,5 @@ block content
     //-   }
     //- });
     
-    //채팅 투표 등록 리스너 추가
-    //- document.querySelector([name='vote']).addEventListener('vote', function (e) {
-    //-   callmodal();
-    //- }
-
-    //- $(function callmodal(){
-    //-   #editModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
-    //-   .modal-dialog
-    //-     .modal-content
-    //-       .modal-header
-    //-         button.close(type="button", data-dismiss="modal")
-    //-           span(aria-hidden="true") ×
-    //-           span.sr-only Close
-    //-         h4#myModalLabel.modal-title
-    //-           | Edit Resource
-    //-       .modal-body
-    //-         //#editForm.form(role='form' method='GET' action='https://www.google.com/')
-    //-         form(role='form' method='GET' action='https://www.google.com/')
-    //-           div.form-group
-    //-             label(for='name') Name:
-    //-             input#name.form-control(type='text', placeholder='name' name='name')
-    //-           div.form-group
-    //-             label(for='email') Email:
-    //-             input#email.form-control(type='email', placeholder='name@email.com' name='email')
-    //-           button.btn.btn-primary(type="submit", name="asdf") Submit
-    //-           button.btn.btn-default(type="button", data-dismiss="modal")
-    //-             | Close
-    //- });
+    
     

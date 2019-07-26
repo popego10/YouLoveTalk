@@ -6,16 +6,26 @@ const fs = require('fs');
 
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
+const SessionInfo = require('../schemas/sessionInfo');
 
 const router = express.Router();
 
-//채팅방 목록 띄우는 라우터
+//채팅방 목록 띄우는 라우터(메인)
 router.get('/', async (req, res, next) =>{
 	try{
-		req.session.nickname = req.param('nickname');
-		//req.session.profile = req.param('profile');
+		//sessionInfo schema 생성하여 mongodb에 저장하고 사용
+		// const sessionInfo = new SessionInfo({
+		// 	user : req.param('nickname'),
+		// 	profile : req.param('profile')
+		// });
+		// req.session.nickname = sessionInfo.user;
+		// req.session.profile = sessionInfo.profile;
+		// sessionInfo.save();
 		const rooms = await Room.find({});
 		req.session.save(function(){
+			req.session.nickname = req.param('nickname');
+			req.session.profile = req.param('profile');
+			console.log('nickname + '+ req.session.nickname);
 			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
 		});
 		//res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
@@ -24,18 +34,54 @@ router.get('/', async (req, res, next) =>{
 		next(error);
 	}
 });
+//채팅방 목록 검색 기능 라우터
+router.get('/search', async(req, res, next)=>{
+	console.log('router 실행')
+	try {
+	const query = req.query.title;
+	//검색어 미입력시 메인화면
+	if(!query){
+		return res.redirect('/');
+	}
+		const title = await title.find({where : {title:query}});
+		let Room = [];
+		
+		return res.render('main', {
+			title: `${query}`,
+		});
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+});
 
-// router.post('/', async (req, res, next) =>{
-// 	try{
-// 		req.session.nickname = req.param('nickname');
-// 		req.session.profile = req.param('profile');
-// 		const rooms = await Room.find({});
-// 		req.session.save(function(){
-// 			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
-// 		});
-// 	}catch(error){
+//채팅방 목록 검색 기능 라우터
+// function createSearch(query) {
+// 	var findPost = {};
+// 	if(query.searchKeyword && query.searchKeyword.length >= 2){
+// 		var postQuery = [];
+// 		postQuery.push({title : {$regax : new RegExp(query.searchKeyword, 'i')}});
+// 		postQuery.push({owner : {$regax : new RegExp(query.searchKeyword, 'i')}});
+// 	}
+// 	return {searchKeyword : query.searchKeyword};
+// }
+// router.post('/', async (req, res, next)=>{
+// 	//검색어(form에서 post방식으로 키워드 입력)
+// 	try {
+// 		var search = createSearch(req.query);
+		
+// 		const searchAll = await Room.find().where('title').in(['title', search])
+// 		// const searchTitle = await Room.find({'title': searchKeyword});
+// 		// const searchOwner = await Room.find({'owner': searchKeyword});
+		
+// 		//쿼리 날리기
+// 		// Room.find().where('title').in(['title', '']);//room에서 title이 ~~인거
+// 		// Room.find().where('owner').in(['owner', '']);//room에서 owner가 ~~인거
+		
+		
+// 	} catch (error) {
 // 		console.error(error);
-// 		next(error);
+// 		next();
 // 	}
 // });
 
@@ -114,6 +160,8 @@ router.get('/room/:id', async(req, res, next)=>{
 		return res.redirect('/');
 	}
 	//console.log(rooms && rooms[req.params.id]);
+	//console.log("session : "+req.session.nickname);  // 찾질못함 nickName 을 
+	//console.log("cookie : "+res.cookies.nickname);  // 찾질못함 nickName 을 
 	const chats = await Chat.find({room: room._id}).sort('createdAt');//==============>기존 채팅 불러오면서 생성 순서별로 정렬
 	return res.render('chat', {
 			room,
@@ -121,7 +169,7 @@ router.get('/room/:id', async(req, res, next)=>{
 			chats,
 			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
 			user: req.session.nickname,
-			profile: req.session.profile,
+			//profile: req.session.profile,
 		});
 	}catch(error){
 		console.error(error);
