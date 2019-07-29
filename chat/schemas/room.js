@@ -2,15 +2,7 @@
  * http://usejsdoc.org/
  */
 const mongoose = require('mongoose');
-
-var today = new Date();
-today.setHours(today.getHours());
-
-//var titleImg = 
-//console.log(today);
-// var today = new Date();
-// today=today.toLocaleString();
-// console.log(today);
+const moment = require('moment-timezone');
 
 const {Schema} = mongoose;
 const roomSchema = new Schema({
@@ -31,10 +23,7 @@ const roomSchema = new Schema({
 	password : {
 		type : String,
 	},//비밀번호(공개/비공개)
-	createdAt : {
-		type : Date,
-		default : today,
-	},//생성시간
+	createdAt : String,//생성시간
 	titleImg : {
 		type : String,
 	},

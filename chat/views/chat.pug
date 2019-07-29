@@ -13,22 +13,34 @@ block content
         for chat in chats
           if chat.user === user
             .mine
-              div= chat.user
+              .chat_wrap1
+                img.rounded-circle(src='http://192.168.0.13:8080/resources/images/profile/' + chat.profile)
+                span= chat.user
               if chat.gif
-                img(src='/gif/' + chat.gif)
+                .chat_wrap2
+                  img(src='/gif/' + chat.gif)
+                  span= chat.createdAt
               else
-                div= chat.chat
+                .chat_wrap2
+                  div= chat.chat
+                  span= chat.createdAt
           else if chat.user === 'system'
             .system
               div= chat.chat
           else
             //.other(style='color:' + chat.user)
             .other
-              div= chat.user
+              .chat_wrap1
+                img.rounded-circle(src='http://192.168.0.13:8080/resources/images/profile/' + chat.profile)
+                span= chat.user
               if chat.gif
-                img(src='/gif/' + chat.gif)
+                .chat_wrap2
+                  img(src='/gif/' + chat.gif)
+                  span= chat.createdAt
               else
-                div= chat.chat
+                .chat_wrap2
+                  div= chat.chat
+                  span= chat.createdAt
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
@@ -71,33 +83,85 @@ block content
       } else {
         div.classList.add('other');
       }
-      //profile 이미지 출력
-      //- var profile = document.createElement('img');
-      //- profile.img = data.profile;
-      //- img.appendChild(profile);
-           
-      //이름
+
+      //newwwwwwwwwwwwwwwwwwwwww
+      var wrap1 = document.createElement('div');
+      wrap1.className = 'chat_wrap1';
+
+      // 닉네임
+      var name = document.createElement('span');
+      name.textContent = data.user;
+      wrap1.appendChild(name);
+
+      // 프로필 사진
+      var profile = document.createElement('img');
+      profile.className = 'rounded-circle';
+      profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
+      wrap1.appendChild(profile);
+
+      var wrap2 = document.createElement('div');
+      wrap2.className = 'chat_wrap2';
+
+      // 채팅 내용
+      if (data.chat) {
+        var chat = document.createElement('div');
+        chat.textContent = data.chat;
+        wrap2.appendChild(chat);
+      } else {
+        var gif = document.createElement('img');
+        gif.src = '/gif/' + data.gif;
+        wrap2.appendChild(gif);
+      }
+
+      // 전송 시간
+      var time = document.createElement('span');
+      time.textContent = data.createdAt;
+      wrap2.appendChild(time);
+
+      div.appendChild(wrap1);
+      div.appendChild(wrap2);
+      /*
+
+      var div1 = document.createElement('div');
+      //- var profile = document.createElement('img.rounded-circle');
       var name = document.createElement('div');
       name.textContent = data.user;
-      div.appendChild(name);
-      
+      div1.appendChild(name);
+      var profile = document.createElement('img');
+      profile.className = 'rounded-circle';
+      profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
+      div1.appendChild(profile);
+      div.appendChild(div1);
+
+      //profile 이미지 출력
+      //var profile = document.createElement('img.rounded-circle');
+      //profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
+      //div.appendChild(profile);
+
+      //유저 이름
+      //var name = document.createElement('div');
+      //name.textContent = data.user;
+      //div.appendChild(name);
+
+      var div2 = document.createElement('div');
       //채팅내용
       if (data.chat) {
         var chat = document.createElement('div');
         chat.textContent = data.chat;
-        div.appendChild(chat);
+        div2.appendChild(chat);
       } else {
         var gif = document.createElement('img');
         gif.src = '/gif/' + data.gif;
-        div.appendChild(gif);
+        div2.appendChild(gif);
       }
       //메시지 전송 시간 출력
       var time = document.createElement('div');
-      time.textContent = new Date().toLocaleTimeString();
-      div.appendChild(time);
-
+      time.textContent = data.createdAt;
+      div2.appendChild(time);
+      div.appendChild(div2);
+      */
       //user에 색 주기
-      div.style.color = data.user;
+      //div.style.color = data.user;
       document.querySelector('#chat-list').appendChild(div);
       
       //채팅 내용 append이후 스크롤 최하단으로 이동(채팅 입력시 마다==>이미지는 안먹으니까 그냥 채팅 입력시에만 최하단 고정)

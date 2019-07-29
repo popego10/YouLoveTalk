@@ -8,16 +8,111 @@
   border-radius: 5px;
   padding: 2px 5px;
 }
-.mine div:nth-child(1), .other div:nth-child(1) {font-size: 12px;} /*아이디*/
-.mine div:nth-child(2), .other div:nth-child(2) {
+
+/* profile 넣을 공간*/
+.other img.rounded-circle, .mine img.rounded-circle{
+    height: 40px;
+    width: 40px;
+    border:1px solid #ffffff;
+    margin-top: 5px;
+}
+/*닉네임*/
+.mine > div, .other > div{
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/*.mine > div:nth-child(2), .other > div:nth-child(2) {
   display: inline-block;
   border: 1px solid silver;
   border-radius: 5px;
   padding: 2px 5px;
   max-width: 300px;
-  font-size: 18px;
+  font-size: 15px;
 }/*채팅내역*/
-.mine div:nth-child(3), .other div:nth-child(3) {font-size: 10px;color:#282c37}/*시간*/
+
+/*.mine div:nth-child(3), .other div:nth-child(3) {font-size: 10px;color:#282c37}시간*/
+
+
+
+
+
+
+.chat_wrap1 {
+  position:relative;
+}
+
+.mine .chat_wrap1 > span {
+  position:absolute;
+  bottom: 0;
+  right: 45px;
+  display:inline-block;
+  text-align: right;
+}
+
+.other .chat_wrap1 > span {
+  position:absolute;
+  bottom: 0;
+  left: 45px;
+  display:inline-block;
+  text-align: left;
+}
+
+.chat_wrap1 > img {
+  margin: 0;
+  padding: 0;
+}
+
+.chat_wrap2 {
+  position:relative;
+  padding: 2px 5px;
+  max-width: 300px;
+  font-size: 15px;
+  display: inline-block;
+}
+
+.chat_wrap2::after {
+  content:'';
+  display:block;
+  clear: both;
+}
+
+.chat_wrap2 div {
+  border: 1px solid silver;
+  border-radius: 5px;
+  padding: 2px 5px;
+  max-width: 300px;
+  font-size: 15px;
+  display: inline-block;
+}
+
+.mine .chat_wrap2 div, .mine .chat_wrap2 img, .mine .chat_wrap2 span {
+  float: right;
+}
+
+.other .chat_wrap2 div, .other .chat_wrap2 img, .other .chat_wrap2 span {
+  float: left;
+}
+
+.mine .chat_wrap2 span {
+  font-size: 11px;
+  position: absolute;
+  bottom:2px;
+  left:-50px;
+}
+
+.other .chat_wrap2 span {
+  font-size: 11px;
+  position: absolute;
+  bottom:2px;
+  right:-50px;
+}
+
+
+
+
+
+
 
 #exit-btn { position: absolute; top: 20px; right: 20px; }
 #chat-list { height: 500px; overflow: auto; padding: 5px; }

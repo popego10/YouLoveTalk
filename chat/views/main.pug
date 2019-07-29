@@ -38,10 +38,10 @@ block content
         .card.mb-sm-3.mb-md-0.contacts_card
           .card-header
             .input-group
-              form(action="/search" name='searchRoom' style='position:relative; width:100%;' method='get')
-                input.form-control.search(type='text', placeholder='검색어를 입력하세요.' style='display:inline-block; width:100%; border-radius:15px !important;')
+              form(name='sendform2' method='post' action='/search' style='position:relative; width:100%;')
+                input.form-control.search(type='text', placeholder='채팅방을 입력하세요.' style='display:inline-block; width:100%; border-radius:15px !important;' id='searchKeyword' name='searchKeyword')
                 span.input-group-text.search_btn(style='display:inline-block; height:100%; position:absolute; top:0; right:0;')
-                  .i.fas.fa-search(onclick='javascript:searchRoom()')
+                  .i.fas.fa-search(onclick='javascript:searchKeyword()')
                       
           .contacts_body
             for room in rooms
@@ -134,9 +134,9 @@ block content
     }
 
     //검색하는 function
-    function searchRoom(){
-      searchRoom.action = '/search';
-      searchRoom.submit();
+    function searchKeyword(){
+      sendform2.action ='/search';
+      sendform2.submit();
     }
 
     //모달창 닫으면 입력form 초기화 function(왜 안먹지)

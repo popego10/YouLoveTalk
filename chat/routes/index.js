@@ -4,95 +4,52 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+//mongodb timezone 문제 해결(String)
+const moment = require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+var date = moment().format('a HH:mm');
+
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
-const SessionInfo = require('../schemas/sessionInfo');
 
 const router = express.Router();
 
 //채팅방 목록 띄우는 라우터(메인)
 router.get('/', async (req, res, next) =>{
 	try{
-		//sessionInfo schema 생성하여 mongodb에 저장하고 사용
-		// const sessionInfo = new SessionInfo({
-		// 	user : req.param('nickname'),
-		// 	profile : req.param('profile')
+		// const rooms = await Room.find({});
+		// req.session.save(function(){
+		// 	req.session.nickname = req.param('nickname');
+		// 	req.session.profile = req.param('profile');
+		// 	console.log('nickname + '+ req.session.nickname);
+		// 	res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
 		// });
-		// req.session.nickname = sessionInfo.user;
-		// req.session.profile = sessionInfo.profile;
-		// sessionInfo.save();
+		
+		const nickname = req.param('nickname');
+		const profile = req.param('profile');
+		if(nickname!=null){
+			res.cookie('nickname', nickname, { expires: new Date(Date.now() + 90000000), httpOnly: true });
+			res.cookie('profile', profile, { expires: new Date(Date.now() + 90000000), httpOnly: true });
+		}
 		const rooms = await Room.find({});
-		req.session.save(function(){
-			req.session.nickname = req.param('nickname');
-			req.session.profile = req.param('profile');
-			console.log('nickname + '+ req.session.nickname);
-			res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
-		});
-		//res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
+		res.render('main', {rooms, error:req.flash('roomError')});
 	}catch(error){
 		console.error(error);
 		next(error);
 	}
 });
 //채팅방 목록 검색 기능 라우터
-router.get('/search', async(req, res, next)=>{
-	console.log('router 실행')
+router.post('/search', async(req, res, next)=>{
 	try {
-	const query = req.query.title;
-	//검색어 미입력시 메인화면
-	if(!query){
-		return res.redirect('/');
-	}
-		const title = await title.find({where : {title:query}});
-		let Room = [];
-		
-		return res.render('main', {
-			title: `${query}`,
-		});
+		console.log('searchKeyword :'+req.body.searchKeyword);
+		const searchKeyword = req.body.searchKeyword;
+		const rooms = await Room.find().where({'title' : searchKeyword});
+		res.render('main', {rooms, error:req.flash('roomError')});
 	} catch (error) {
 		console.error(error);
 		next(error);
 	}
 });
-
-//채팅방 목록 검색 기능 라우터
-// function createSearch(query) {
-// 	var findPost = {};
-// 	if(query.searchKeyword && query.searchKeyword.length >= 2){
-// 		var postQuery = [];
-// 		postQuery.push({title : {$regax : new RegExp(query.searchKeyword, 'i')}});
-// 		postQuery.push({owner : {$regax : new RegExp(query.searchKeyword, 'i')}});
-// 	}
-// 	return {searchKeyword : query.searchKeyword};
-// }
-// router.post('/', async (req, res, next)=>{
-// 	//검색어(form에서 post방식으로 키워드 입력)
-// 	try {
-// 		var search = createSearch(req.query);
-		
-// 		const searchAll = await Room.find().where('title').in(['title', search])
-// 		// const searchTitle = await Room.find({'title': searchKeyword});
-// 		// const searchOwner = await Room.find({'owner': searchKeyword});
-		
-// 		//쿼리 날리기
-// 		// Room.find().where('title').in(['title', '']);//room에서 title이 ~~인거
-// 		// Room.find().where('owner').in(['owner', '']);//room에서 owner가 ~~인거
-		
-		
-// 	} catch (error) {
-// 		console.error(error);
-// 		next();
-// 	}
-// });
-
-//채팅방 생성 라우터(get)
-// router.get('/room', (req, res) => {
-// 	var nickname = req.param('nickname');
-// 	console.log('nickname='+nickname);
-// 	var profile = req.param('profile');
-// 	console.log('profile='+profile);
-// 	res.render('room', {title:'채팅방 생성'});
-// });
 
 //채팅방 생성 라우터(post)+titleImg 저장하는 공간 생성
 fs.readdir('titleImg', (error)=>{
@@ -121,9 +78,10 @@ router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 		const room = new Room({
 			title: req.body.title, //채팅방제목
 			max: req.body.max, //채팅방 인원
-			owner: req.session.nickname,//채팅 방장
+			owner: req.cookies.nickname,//채팅 방장
 			password: req.body.password, //채팅방 비밀번호
 			titleImg: req.file.filename,//채팅방 메인 이미지
+			createdAt: date,
 		});
 		//console.log(req.file);
 		if(!room.password){
@@ -168,8 +126,8 @@ router.get('/room/:id', async(req, res, next)=>{
 			title: room.title,
 			chats,
 			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
-			user: req.session.nickname,
-			//profile: req.session.profile,
+			user: req.cookies.nickname,
+			profile: req.cookies.profile,
 		});
 	}catch(error){
 		console.error(error);
@@ -197,9 +155,10 @@ router.post('/room/:id/chat', async (req, res, next) => {
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.session.nickname,
+			user: req.cookies.nickname,
 			chat: req.body.chat,
-			createdAt: req.body.createdAt,
+			createdAt: date,
+			profile: req.cookies.profile,
 		});
 		await chat.save();
 		req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
@@ -234,9 +193,10 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.session.nickname,
+			user: req.cookies.nickname,
 			gif: req.file.filename,
-			createdAt: req.body.createdAt,
+			createdAt: date,
+			profile: req.cookies.profile,
 		});
 		await chat.save();
 		console.log(req.file);

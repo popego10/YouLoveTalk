@@ -37,6 +37,5 @@ module.exports =() => {
 	});//////////////에러 발생시 에러 내용 기록하고 접속끊길시 재접속
 	require('./chat');
 	require('./room');
-	require('./sessionInfo');
 	/////////////chat스키마와 room스키마 연결
 }
