@@ -14,7 +14,7 @@ block content
           if chat.user === user
             .mine
               .chat_wrap1
-                img.rounded-circle(src='http://192.168.0.13:8080/resources/images/profile/' + chat.profile)
+                img.rounded-circle(src='http://192.168.0.94:8080/resources/images/profile/' + chat.profile)
                 span= chat.user
               if chat.gif
                 .chat_wrap2
@@ -31,7 +31,7 @@ block content
             //.other(style='color:' + chat.user)
             .other
               .chat_wrap1
-                img.rounded-circle(src='http://192.168.0.13:8080/resources/images/profile/' + chat.profile)
+                img.rounded-circle(src='http://192.168.0.94:8080/resources/images/profile/' + chat.profile)
                 span= chat.user
               if chat.gif
                 .chat_wrap2
@@ -96,7 +96,7 @@ block content
       // 프로필 사진
       var profile = document.createElement('img');
       profile.className = 'rounded-circle';
-      profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
+      profile.src = 'http://192.168.0.94:8080/resources/images/profile/'+data.profile;
       wrap1.appendChild(profile);
 
       var wrap2 = document.createElement('div');

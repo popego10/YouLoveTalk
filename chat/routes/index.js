@@ -17,19 +17,17 @@ const router = express.Router();
 //채팅방 목록 띄우는 라우터(메인)
 router.get('/', async (req, res, next) =>{
 	try{
-		// const rooms = await Room.find({});
-		// req.session.save(function(){
-		// 	req.session.nickname = req.param('nickname');
-		// 	req.session.profile = req.param('profile');
-		// 	console.log('nickname + '+ req.session.nickname);
-		// 	res.render('main', {rooms, title:'채팅창', error:req.flash('roomError')});
-		// });
-		
 		const nickname = req.param('nickname');
 		const profile = req.param('profile');
+	
+		//session에 닉네임 저장해서 system에 출력
 		if(nickname!=null){
-			res.cookie('nickname', nickname, { expires: new Date(Date.now() + 90000000), httpOnly: true });
-			res.cookie('profile', profile, { expires: new Date(Date.now() + 90000000), httpOnly: true });
+			req.session.save(function(){
+				req.session.nickname = nickname;
+				req.session.profile = profile;
+			});
+			// res.cookie('nickname', nickname, { expires: new Date(Date.now() + 90000000), httpOnly: true });
+			// res.cookie('profile', profile, { expires: new Date(Date.now() + 90000000), httpOnly: true });
 		}
 		const rooms = await Room.find({});
 		res.render('main', {rooms, error:req.flash('roomError')});
@@ -38,12 +36,12 @@ router.get('/', async (req, res, next) =>{
 		next(error);
 	}
 });
-//채팅방 목록 검색 기능 라우터
+//채팅방 목록 검색 기능 라우터(검색조건 설정)
 router.post('/search', async(req, res, next)=>{
 	try {
 		console.log('searchKeyword :'+req.body.searchKeyword);
 		const searchKeyword = req.body.searchKeyword;
-		const rooms = await Room.find().where({'title' : searchKeyword});
+		const rooms = await Room.find().where({'title' : {$regex: searchKeyword}});
 		res.render('main', {rooms, error:req.flash('roomError')});
 	} catch (error) {
 		console.error(error);
@@ -78,7 +76,7 @@ router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 		const room = new Room({
 			title: req.body.title, //채팅방제목
 			max: req.body.max, //채팅방 인원
-			owner: req.cookies.nickname,//채팅 방장
+			owner: req.session.nickname,//채팅 방장
 			password: req.body.password, //채팅방 비밀번호
 			titleImg: req.file.filename,//채팅방 메인 이미지
 			createdAt: date,
@@ -93,6 +91,7 @@ router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 		const io = req.app.get('io');
 		io.of('/room').emit('newRoom', newRoom);
 		res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+		
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -117,16 +116,13 @@ router.get('/room/:id', async(req, res, next)=>{
      	req.flash('roomError', '인원 초과');
 		return res.redirect('/');
 	}
-	//console.log(rooms && rooms[req.params.id]);
-	//console.log("session : "+req.session.nickname);  // 찾질못함 nickName 을 
-	//console.log("cookie : "+res.cookies.nickname);  // 찾질못함 nickName 을 
 	const chats = await Chat.find({room: room._id}).sort('createdAt');//==============>기존 채팅 불러오면서 생성 순서별로 정렬
 	return res.render('chat', {
 			room,
 			title: room.title,
 			chats,
 			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
-			user: req.cookies.nickname,
+			user: req.session.nickname,
 			profile: req.cookies.profile,
 		});
 	}catch(error){
@@ -155,7 +151,7 @@ router.post('/room/:id/chat', async (req, res, next) => {
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.cookies.nickname,
+			user: req.session.nickname,
 			chat: req.body.chat,
 			createdAt: date,
 			profile: req.cookies.profile,
@@ -193,7 +189,7 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	try{
 		const chat = new Chat({
 			room: req.params.id,
-			user: req.cookies.nickname,
+			user: req.session.nickname,
 			gif: req.file.filename,
 			createdAt: date,
 			profile: req.cookies.profile,
