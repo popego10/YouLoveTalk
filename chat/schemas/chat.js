@@ -19,6 +19,7 @@ const chatSchema = new Schema({
 	chat : String, // 채팅내역
 	gif : String, // 이미지 주소
 	createdAt : String,// 생성시간
-	profile: String,
+	profile: String,//프로필 
+	mp4 : String,//동영상
 });
 module.exports = mongoose.model('Chat', chatSchema);

@@ -123,7 +123,7 @@ router.get('/room/:id', async(req, res, next)=>{
 			chats,
 			number: (rooms&&rooms[req.params.id]&&rooms[req.params.id].length+1)||1,//==>채팅인원수 표현
 			user: req.session.nickname,
-			profile: req.cookies.profile,
+			profile: req.session.profile,
 		});
 	}catch(error){
 		console.error(error);
@@ -154,7 +154,7 @@ router.post('/room/:id/chat', async (req, res, next) => {
 			user: req.session.nickname,
 			chat: req.body.chat,
 			createdAt: date,
-			profile: req.cookies.profile,
+			profile: req.session.profile,
 		});
 		await chat.save();
 		req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
@@ -192,7 +192,7 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 			user: req.session.nickname,
 			gif: req.file.filename,
 			createdAt: date,
-			profile: req.cookies.profile,
+			profile: req.session.profile,
 		});
 		await chat.save();
 		console.log(req.file);
@@ -204,22 +204,25 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	}
 });
 
-//채팅내용 백업을 위한 라우터 설정(임시)
-// var path = 'C:\Users\user\Desktop\backup';
-// var data = 'Hello world!';
+//mkv, mp4, avi, mwv
+router.post('/room/:id/mp4', upload.single('mp4'), async(req, res, next)=>{
+	try{
+		const chat = new Chat({
+			room: req.params.id,
+			user: req.session.nickname,
+			mp4: req.file.filename,
+			createdAt: date,
+			profile: req.session.profile,
+		});
+		await chat.save();
+		console.log(req.file);
+		req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
+		res.send('ok');
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
+});
 
-// fs.writeFile(path, data, 'utf8', function(error, data){
-// 	if(error){
-// 		console.log('파일 백업 에러');
-// 	}
-// });
-// router.post('/room/:id/backup', async(req, res, next)=>{
-// 	try{
-		
-// 	}catch(error){
-// 		console.error(error);
-// 		next();
-// 	}
-// })
 
 module.exports = router;
