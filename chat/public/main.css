@@ -22,22 +22,6 @@
   margin-top: 5px;
 }
 
-/*.mine > div:nth-child(2), .other > div:nth-child(2) {
-  display: inline-block;
-  border: 1px solid silver;
-  border-radius: 5px;
-  padding: 2px 5px;
-  max-width: 300px;
-  font-size: 15px;
-}/*채팅내역*/
-
-/*.mine div:nth-child(3), .other div:nth-child(3) {font-size: 10px;color:#282c37}시간*/
-
-
-
-
-
-
 .chat_wrap1 {
   position:relative;
 }
@@ -108,11 +92,11 @@
   right:-50px;
 }
 
-
-
-
-
-
+.mine .chat_wrap2 iframe, .other .chat_wrap2 iframe{
+  height: 40vh;
+  width: 50vw;
+  display: inline-block;
+}
 
 #exit-btn { position: absolute; top: 20px; right: 20px; }
 #chat-list { height: 500px; overflow: auto; padding: 5px; }
@@ -124,6 +108,16 @@ label[for='gif'], #chat, #chat-form [type='submit'] {
 }
 label[for='gif'] { cursor: pointer; padding: 5px; }
 #gif { display: none; }
+
+label[for='mp4'], #chat, #chat-form [type='submit'] {
+  display: inline-block;
+  height: 30px;
+  vertical-align: top;
+}
+label[for='mp4'] { cursor: pointer; padding: 5px; }
+#mp4 { display: none; }
+
+
 #border {
   text-align: center;
   border: 1px solid silver;

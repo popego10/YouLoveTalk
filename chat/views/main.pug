@@ -110,25 +110,12 @@ block content
         location.href = '/room/' + e.target.dataset.id;
       }
     }
-    //- $(document).forEach(function(){
-    //-   $('#enter').on('click', function(){
-    //-     addBtnEvent(e);
-    //-   })
-    //- });
-      
+         
     document.querySelectorAll('.join-btn').forEach(function (btn) {
       btn.addEventListener('click', addBtnEvent);
     });
     
     function createRoom(){
-      // jQuery 로 수정
-      //var title = $('#title').val();      
-      //var max = $('#max').val();  
-      //var password = $('#password').val();  
-        
-      //sendform.titleTxt.value  = title;
-      //sendform.maxTxt.value  = max;
-      //sendform.passwordTxt.value  = password;
       sendform.action ='/room';
       sendform.submit();
     }

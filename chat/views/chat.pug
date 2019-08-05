@@ -7,7 +7,7 @@ block content
       i.fas.fa-running(aria-hidden='true' style='font-size:50px;color:#282c37;')
     div(style='position:absolute;top:0px;right:60px;') 참여인원
       #number-count= number
-  div(style='margin:10px 30px 30px 30px; border: 3px solid #cbcbcb; padding:30px;')
+  div(style='margin:10px 30px 10px 30px; border: 3px solid #cbcbcb; padding:30px;')
     fieldset
       #chat-list(style='overflow: auto')
         for chat in chats
@@ -19,6 +19,10 @@ block content
               if chat.gif
                 .chat_wrap2
                   img(src='/gif/' + chat.gif)
+                  span= chat.createdAt
+              else if chat.mp4
+                .chat_wrap2
+                  iframe(src='/mp4/' + chat.mp4 + '?autoplay=0')
                   span= chat.createdAt
               else
                 .chat_wrap2
@@ -37,6 +41,10 @@ block content
                 .chat_wrap2
                   img(src='/gif/' + chat.gif)
                   span= chat.createdAt
+              else if chat.mp4
+                .chat_wrap2
+                  iframe(src='/mp4/' + chat.mp4 + '?autoplay=0')
+                  span= chat.createdAt
               else
                 .chat_wrap2
                   div= chat.chat
@@ -44,9 +52,9 @@ block content
   div(style='margin-right:30px;')
     form#chat-form(action='/chat' method='post' enctype='multipart/form-data')
       div
-        //- label(for='file')
-        //-   i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;' onClick='fileBackUp();')
-        //-   input#file(type='file' name='fileBackUp' accept='txt' onClick='fileBackUp();')
+        label(for='mp4')
+          i.fa.fa-file(aria-hidden='true' style='font-size:30px;color:#282c37;margin-right:10px;')
+          input#mp4(type='file' name='mp4' accept='video/mp4')
         label(for='gif')
           i.fa.fa-image(aria-hidden='true' style='font-size:30px;color:#282c37;')
           input#gif(type='file' name='gif' accept='image/gif')
@@ -107,12 +115,16 @@ block content
         var chat = document.createElement('div');
         chat.textContent = data.chat;
         wrap2.appendChild(chat);
+      } else if(data.mp4){
+        var mp4 = document.createElement('iframe');
+        mp4.src = '/mp4/' + data.mp4 + '?autoplay=0';
+        wrap2.appendChild(mp4);
       } else {
         var gif = document.createElement('img');
         gif.src = '/gif/' + data.gif;
         wrap2.appendChild(gif);
       }
-
+     
       // 전송 시간
       var time = document.createElement('span');
       time.textContent = data.createdAt;
@@ -120,48 +132,7 @@ block content
 
       div.appendChild(wrap1);
       div.appendChild(wrap2);
-      /*
-
-      var div1 = document.createElement('div');
-      //- var profile = document.createElement('img.rounded-circle');
-      var name = document.createElement('div');
-      name.textContent = data.user;
-      div1.appendChild(name);
-      var profile = document.createElement('img');
-      profile.className = 'rounded-circle';
-      profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
-      div1.appendChild(profile);
-      div.appendChild(div1);
-
-      //profile 이미지 출력
-      //var profile = document.createElement('img.rounded-circle');
-      //profile.src = 'http://192.168.0.13:8080/resources/images/profile/'+data.profile;
-      //div.appendChild(profile);
-
-      //유저 이름
-      //var name = document.createElement('div');
-      //name.textContent = data.user;
-      //div.appendChild(name);
-
-      var div2 = document.createElement('div');
-      //채팅내용
-      if (data.chat) {
-        var chat = document.createElement('div');
-        chat.textContent = data.chat;
-        div2.appendChild(chat);
-      } else {
-        var gif = document.createElement('img');
-        gif.src = '/gif/' + data.gif;
-        div2.appendChild(gif);
-      }
-      //메시지 전송 시간 출력
-      var time = document.createElement('div');
-      time.textContent = data.createdAt;
-      div2.appendChild(time);
-      div.appendChild(div2);
-      */
-      //user에 색 주기
-      //div.style.color = data.user;
+      
       document.querySelector('#chat-list').appendChild(div);
       
       //채팅 내용 append이후 스크롤 최하단으로 이동(채팅 입력시 마다==>이미지는 안먹으니까 그냥 채팅 입력시에만 최하단 고정)
@@ -203,39 +174,23 @@ block content
       xhr.send(formData);
     });
 
-    //채팅 백업 리스너 추가
-    //- document.querySelector('#chat').addEventListener('click', function(e){
-    //-   var blob = new Blob([content], { 
-    //-     type: 'text/plain;charset=utf-8' 
-    //-   });
-    //-   var URL = URL.createObjectURL(blob);
-    //-   var a = document.createElement('a');
- 
-    //-   a.download = fileName;
-    //-   a.href = objURL;
-    //-   a.click();
-    //- });
+    //채팅 동영상 전송 이벤트 리스너 추가
+    document.querySelector('#mp4').addEventListener('change', function (e) {
+      var formData = new FormData();
+      var xhr = new XMLHttpRequest();
+      console.log(e.target.files);
+      formData.append('mp4', e.target.files[0]);
+      xhr.onload = function(){
+        if(xhr.status === 200){
+          e.target.file = null;
+        }else{
+          console.error(xhr.responseText);
+        }
+      };
+      xhr.open('POST', '/room/#{room._id}/mp4?autoplay=0');
+      xhr.send(formData);
+    });
 
-    //- function fileBackUp(){
-    //-   var backupChat = document.querySelector('#chat').value;
-    //-   var blob = new Blob([content], { 
-    //-     type: 'text/plain;charset=utf-8' 
-    //-   });
-    //-   var URL = URL.createObjectURL(blob);
-    //-   var a = document.createElement('a');
-    //-   a.href = url; 
-    //-   a.download = "파일명.txt"; 
-    //-   a.click(); 
-    //-   URL.revokeObjectURL(url); 
-    //- }
-
-    //- fs.writeFile('파일경로/파일명','파일에들어갈내용',function(err){ 
-    //-   if (err === null) { 
-    //-     console.log('success'); 
-    //-   } else { 
-    //-     console.log('fail');
-    //-   }
-    //- });
     
     
     

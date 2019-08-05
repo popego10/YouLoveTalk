@@ -74,15 +74,6 @@ app.use((req, res, next)=>{
 	next();
 });
 
-// app.use((req, res, next)=>{
-// 	req.session.nickname = req.param('nickname');
-// 	req.session.profile = req.param('profile');
-// 	req.session.save(function(){
-// 		console.log('nickname = ' + req.session.nickname);
-// 		next();
-// 	});
-// });
-
 app.use('/',indexRouter);
 
 app.use((req, res, next) =>{

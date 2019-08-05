@@ -68,7 +68,6 @@ const titleImg = multer({
 			callback(null, path.basename(file.originalname, extension) + '_' + new Date().valueOf() + extension);
 		},
 	}),
-	limits : {fileSize : 512*512},
 });
 router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 	console.log("/room 모달");
@@ -183,7 +182,7 @@ const upload = multer({
 			callback(null, path.basename(file.originalname, extension) + '_' + new Date().valueOf() + extension);
 		},
 	}),
-	limits : {fileSize : 1024*1024},
+	//limits : {fileSize : 1024*1024},
 });
 router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	try{
@@ -204,7 +203,6 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	}
 });
 
-//mkv, mp4, avi, mwv
 router.post('/room/:id/mp4', upload.single('mp4'), async(req, res, next)=>{
 	try{
 		const chat = new Chat({
@@ -223,6 +221,5 @@ router.post('/room/:id/mp4', upload.single('mp4'), async(req, res, next)=>{
 		next(error);
 	}
 });
-
 
 module.exports = router;
