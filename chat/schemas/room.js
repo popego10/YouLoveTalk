@@ -2,7 +2,6 @@
  * http://usejsdoc.org/
  */
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');
 
 const {Schema} = mongoose;
 const roomSchema = new Schema({

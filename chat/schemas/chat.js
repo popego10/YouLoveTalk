@@ -2,7 +2,6 @@
  * http://usejsdoc.org/
  */
 const mongoose = require('mongoose');
-const moment = require('moment-timezone');
 
 const {Schema} = mongoose;
 const {Types : {ObjectId}} = Schema;
@@ -14,7 +13,7 @@ const chatSchema = new Schema({
 	},//채팅방 아이디
 	user : {
 		type : String,
-		//required : true,
+		required : true,
 	},//채팅유저
 	chat : String, // 채팅내역
 	gif : String, // 이미지 주소

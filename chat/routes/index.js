@@ -5,9 +5,9 @@ const path = require('path');
 const fs = require('fs');
 
 //mongodb timezone 문제 해결(String)
-const moment = require('moment-timezone');
-moment.tz.setDefault("Asia/Seoul");
-var date = moment().format('a HH:mm');
+// const moment = require('moment-timezone');
+// moment.tz.setDefault("Asia/Seoul");
+// var date = moment().format('a HH:mm');
 
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) =>{
 			// res.cookie('profile', profile, { expires: new Date(Date.now() + 90000000), httpOnly: true });
 		}
 		const rooms = await Room.find({});
-		res.render('main', {rooms, error:req.flash('roomError')});
+		res.render('getChatRoomList', {rooms, error:req.flash('roomError')});
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -42,7 +42,7 @@ router.post('/search', async(req, res, next)=>{
 		console.log('searchKeyword :'+req.body.searchKeyword);
 		const searchKeyword = req.body.searchKeyword;
 		const rooms = await Room.find().where({'title' : {$regex: searchKeyword}});
-		res.render('main', {rooms, error:req.flash('roomError')});
+		res.render('getChatRoomList', {rooms, error:req.flash('roomError')});
 	} catch (error) {
 		console.error(error);
 		next(error);
@@ -72,6 +72,10 @@ const titleImg = multer({
 router.post('/room', titleImg.single('titleImg'), async(req, res, next) => {
 	console.log("/room 모달");
 	try{
+		const moment = require('moment-timezone');
+		moment.tz.setDefault("Asia/Seoul");
+		var date = moment().format('a HH:mm');
+
 		const room = new Room({
 			title: req.body.title, //채팅방제목
 			max: req.body.max, //채팅방 인원
@@ -116,7 +120,7 @@ router.get('/room/:id', async(req, res, next)=>{
 		return res.redirect('/');
 	}
 	const chats = await Chat.find({room: room._id}).sort('createdAt');//==============>기존 채팅 불러오면서 생성 순서별로 정렬
-	return res.render('chat', {
+	return res.render('getChat', {
 			room,
 			title: room.title,
 			chats,
@@ -148,6 +152,10 @@ router.get('/room/:id', async(req, res, next)=>{
 //채팅 라우터 설정
 router.post('/room/:id/chat', async (req, res, next) => {
 	try{
+		const moment = require('moment-timezone');
+		moment.tz.setDefault("Asia/Seoul");
+		var date = moment().format('a HH:mm');
+
 		const chat = new Chat({
 			room: req.params.id,
 			user: req.session.nickname,
@@ -186,6 +194,10 @@ const upload = multer({
 });
 router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	try{
+		const moment = require('moment-timezone');
+		moment.tz.setDefault("Asia/Seoul");
+		var date = moment().format('a HH:mm');
+
 		const chat = new Chat({
 			room: req.params.id,
 			user: req.session.nickname,
@@ -203,8 +215,13 @@ router.post('/room/:id/gif', upload.single('gif'), async(req, res, next)=>{
 	}
 });
 
+//동영상 전송하는 mp4
 router.post('/room/:id/mp4', upload.single('mp4'), async(req, res, next)=>{
 	try{
+		const moment = require('moment-timezone');
+		moment.tz.setDefault("Asia/Seoul");
+		var date = moment().format('a HH:mm');
+
 		const chat = new Chat({
 			room: req.params.id,
 			user: req.session.nickname,

@@ -42,7 +42,7 @@ app.set('port', process.env.PORT || 8005);
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname,'public')));
 
-app.use('/mp4', express.static(path.join(__dirname, 'uploads')));//==>동영상 업로드 + 스트리밍
+app.use('/mp4', express.static(path.join(__dirname, 'uploads')));//==>동영상 업로드
 app.use('/gif', express.static(path.join(__dirname,'uploads')));//==>이미지 업로드
 app.use('/room', express.static(path.join(__dirname, 'titleImg')));//==>채팅방 메인 이미지 업로드
 
@@ -55,15 +55,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(sessionMiddleware);
 
-// app.use(session({
-// 	resave:false,
-// 	saveUninitialized:false,
-// 	secret:process.env.COOKIE_SECRET,
-// 	cookie:{
-// 		httpOnly:true,
-// 		secure:false,
-// 	},
-// }));
 app.use(flash());
 
 app.use((req, res, next)=>{

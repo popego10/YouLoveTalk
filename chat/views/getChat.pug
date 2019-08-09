@@ -14,7 +14,7 @@ block content
           if chat.user === user
             .mine
               .chat_wrap1
-                img.rounded-circle(src='http://192.168.0.94:8080/resources/images/profile/' + chat.profile)
+                img.rounded-circle(src='http://192.168.0.28:8080/resources/images/profile/' + chat.profile)
                 span= chat.user
               if chat.gif
                 .chat_wrap2
@@ -22,7 +22,7 @@ block content
                   span= chat.createdAt
               else if chat.mp4
                 .chat_wrap2
-                  iframe(src='/mp4/' + chat.mp4 + '?autoplay=0')
+                  iframe(src='/mp4/' + chat.mp4)
                   span= chat.createdAt
               else
                 .chat_wrap2
@@ -35,7 +35,7 @@ block content
             //.other(style='color:' + chat.user)
             .other
               .chat_wrap1
-                img.rounded-circle(src='http://192.168.0.94:8080/resources/images/profile/' + chat.profile)
+                img.rounded-circle(src='http://192.168.0.28:8080/resources/images/profile/' + chat.profile)
                 span= chat.user
               if chat.gif
                 .chat_wrap2
@@ -43,7 +43,7 @@ block content
                   span= chat.createdAt
               else if chat.mp4
                 .chat_wrap2
-                  iframe(src='/mp4/' + chat.mp4 + '?autoplay=0')
+                  iframe(src='/mp4/' + chat.mp4)
                   span= chat.createdAt
               else
                 .chat_wrap2
@@ -104,7 +104,7 @@ block content
       // 프로필 사진
       var profile = document.createElement('img');
       profile.className = 'rounded-circle';
-      profile.src = 'http://192.168.0.94:8080/resources/images/profile/'+data.profile;
+      profile.src = 'http://192.168.0.28:8080/resources/images/profile/'+data.profile;
       wrap1.appendChild(profile);
 
       var wrap2 = document.createElement('div');
@@ -117,7 +117,7 @@ block content
         wrap2.appendChild(chat);
       } else if(data.mp4){
         var mp4 = document.createElement('iframe');
-        mp4.src = '/mp4/' + data.mp4 + '?autoplay=0';
+        mp4.src = '/mp4/' + data.mp4;
         wrap2.appendChild(mp4);
       } else {
         var gif = document.createElement('img');
@@ -187,7 +187,7 @@ block content
           console.error(xhr.responseText);
         }
       };
-      xhr.open('POST', '/room/#{room._id}/mp4?autoplay=0');
+      xhr.open('POST', '/room/#{room._id}/mp4');
       xhr.send(formData);
     });
 

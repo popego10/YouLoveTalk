@@ -2,7 +2,7 @@ extends layout
 
 block content
  
-  img(src="http://192.168.0.94:8080//resources/images/youlovetalk_logo.png" width='250px')
+  img(src="http://192.168.0.28:8080//resources/images/youlovetalk_logo.png" width='250px')
     
   i.fa.fa-plus-square(aria-hidden='true' style='position: absolute; top: 40px; right: 25px; font-size:50px;color:#f2c029;', data-toggle='modal', data-target='#myModal')
   
@@ -67,40 +67,42 @@ block content
     var socket = io.connect('http://192.168.0.13:8005/room', {
       path: '/socket.io'
     });
-    socket.on('newRoom', function (data) {
-      var tr = document.createElement('tr');
-      var td = document.createElement('td');
+    //- socket.on('newRoom', function (data) {
+    //-   var ui = document.createElement('ui');
+    //-   var li = document.createElement('li');
+            
+    //-   ui.textContent = data.password ? '비밀방' : '공개방';
+    //-   tr.prependChild(td);
       
-      td.textContent = data.password ? '비밀방' : '공개방';
-      tr.prependChild(td);
-      
-      td = document.createElement('td');
-      td.textContent = data.title;
-      tr.prependChild(td);
+    //-   td = document.createElement('td');
+    //-   td.textContent = data.title;
+    //-   tr.prependChild(td);
                   
-      td = document.createElement('td');
-      td.style.color = data.owner;
-      td.textContent = data.owner;
-      tr.prependChild(td);
-      td = document.createElement('td');
+    //-   td = document.createElement('td');
+    //-   td.style.color = data.owner;
+    //-   td.textContent = data.owner;
+    //-   tr.prependChild(td);
+    //-   td = document.createElement('td');
       
-      var button = document.createElement('td');
-      button.textContent = '입장';
-      button.dataset.password = data.password ? 'true' : 'false';
-      button.dataset.id = data._id;
-      button.addEventListener('click', addBtnEvent);
-      td.prependChild(button);
-      tr.prependChild(td);
-      tr.dataset.id = data._id;
-      document.querySelector('table tbody').appendChild(tr);
-    });
-    socket.on('removeRoom', function (data) {
-      document.querySelectorAll('tbody tr').forEach(function (tr) {
-        if (tr.dataset.id === data) {
-          tr.parentNode.removeChild(tr);
-        }
-      });
-    });
+    //-   var button = document.createElement('td');
+    //-   button.textContent = '입장';
+    //-   button.dataset.password = data.password ? 'true' : 'false';
+    //-   button.dataset.id = data._id;
+    //-   button.addEventListener('click', addBtnEvent);
+    //-   td.prependChild(button);
+    //-   tr.prependChild(td);
+    //-   tr.dataset.id = data._id;
+    //-   document.querySelector('table tbody').appendChild(tr);
+      
+    //- });
+    //- socket.on('removeRoom', function (data) {
+    //-   document.querySelectorAll('.contacts').forEach(function (li) {
+    //-     if (li.dataset.id === data) {
+    //-       li.parentNode.removeChild(.d-flex.bd-highlight);
+    //-     }
+    //-   });
+    //- });
+    
     //채팅방 입장하는 function
     function addBtnEvent(e) {
       if (e.target.dataset.password === 'true') {//비밀방
